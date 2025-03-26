@@ -1,7 +1,24 @@
+import { router, useRootNavigationState } from "expo-router";
+import { useEffect } from "react";
 import { Text, View, ActivityIndicator, Image } from "react-native";
 import tw from "twrnc";
 
 export default function Index() {
+  const rootNavigationState = useRootNavigationState();
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
+    if (rootNavigationState?.key) {
+      timeout = setTimeout(() => {
+        router.replace("/home");
+      }, 500);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [rootNavigationState?.key]);
   return (
     <View style={tw`flex-1 bg-indigo-600 items-center justify-center gap-y-8`}>
       <Image
