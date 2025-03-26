@@ -1,10 +1,11 @@
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, Text, ActivityIndicator, Pressable } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { MaterialIcons } from "@expo/vector-icons";
 import { ProgressCircle } from "react-native-svg-charts";
 import * as FileSystem from "expo-file-system";
 import { useQuery } from "@tanstack/react-query";
+import { router } from "expo-router";
 
 const StorageCard = () => {
   const { data: totalSpace, isLoading: totalSpaceLoading } = useQuery({
@@ -24,7 +25,10 @@ const StorageCard = () => {
     },
   });
   return (
-    <View style={tw`bg-indigo-600 p-4 rounded-lg gap-y-3`}>
+    <Pressable
+      style={tw`bg-indigo-600 p-4 rounded-lg gap-y-3`}
+      onPress={() => router.push("/internal-storage")}
+    >
       <Text style={tw`text-white text-base font-medium`}>Internal Storage</Text>
 
       <View style={tw`flex-row justify-between`}>
@@ -66,7 +70,7 @@ const StorageCard = () => {
           <Text style={tw`text-white`}>Available</Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

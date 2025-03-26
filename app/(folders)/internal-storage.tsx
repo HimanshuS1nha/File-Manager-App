@@ -3,6 +3,9 @@ import React from "react";
 import tw from "twrnc";
 import { useQuery } from "@tanstack/react-query";
 import { readDir, ExternalStorageDirectoryPath } from "react-native-fs";
+import { FlashList } from "@shopify/flash-list";
+
+import FolderPreview from "@/components/folder-preview";
 
 import { getFileType } from "@/utils/get-file-type";
 
@@ -40,8 +43,22 @@ const InternalStorage = () => {
       {isLoading ? (
         <ActivityIndicator size={40} color={"blue"} />
       ) : data && data.length > 0 ? (
-        // TODO: Show data here
-        <Text></Text>
+        <FlashList
+          data={data}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => {
+            return (
+              <>
+                {item.type === "folder" ? (
+                  <FolderPreview folder={item} />
+                ) : (
+                  // TODO: Show file preview here
+                  <Text></Text>
+                )}
+              </>
+            );
+          }}
+        />
       ) : (
         <View style={tw`items-center`}>
           <Text style={tw`text-rose-600 font-semibold`}>No data to show.</Text>
