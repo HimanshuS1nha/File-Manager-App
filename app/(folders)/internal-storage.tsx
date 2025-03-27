@@ -6,6 +6,7 @@ import { readDir, ExternalStorageDirectoryPath } from "react-native-fs";
 import { FlashList } from "@shopify/flash-list";
 
 import FolderPreview from "@/components/folder-preview";
+import FilePreview from "@/components/file-preview";
 
 import { getFileType } from "@/utils/get-file-type";
 
@@ -52,8 +53,7 @@ const InternalStorage = () => {
                 {item.type === "folder" ? (
                   <FolderPreview folder={item} />
                 ) : (
-                  // TODO: Show file preview here
-                  <Text></Text>
+                  <FilePreview file={item} />
                 )}
               </>
             );
