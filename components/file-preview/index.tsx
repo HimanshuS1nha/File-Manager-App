@@ -9,6 +9,7 @@ import AudioPreview from "./audio-preview";
 import ApkPreview from "./apk-preview";
 import PdfPreview from "./pdf-preview";
 import ZipPreview from "./zip-preview";
+import OtherFilePreview from "./other-file-preview";
 
 import type { FileOrFolderType } from "@/types";
 
@@ -28,8 +29,7 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
       ) : file.fileType === "zip" ? (
         <ZipPreview file={file} />
       ) : (
-        // TODO: Handle other files
-        <></>
+        <OtherFilePreview file={file} />
       )}
 
       <FontAwesome6 name="ellipsis-vertical" size={20} color="black" />
