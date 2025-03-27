@@ -6,6 +6,7 @@ import { FontAwesome6 } from "@expo/vector-icons";
 import ImagePreview from "./image-preview";
 import VideoPreview from "./video-preview";
 import AudioPreview from "./audio-preview";
+import ApkPreview from "./apk-preview";
 
 import type { FileOrFolderType } from "@/types";
 
@@ -18,6 +19,8 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
         <VideoPreview file={file} />
       ) : file.fileType === "audio" ? (
         <AudioPreview file={file} />
+      ) : file.fileType === "apk" ? (
+        <ApkPreview file={file} />
       ) : (
         // TODO: Handle other files
         <></>
