@@ -8,6 +8,7 @@ import VideoPreview from "./video-preview";
 import AudioPreview from "./audio-preview";
 import ApkPreview from "./apk-preview";
 import PdfPreview from "./pdf-preview";
+import ZipPreview from "./zip-preview";
 
 import type { FileOrFolderType } from "@/types";
 
@@ -24,6 +25,8 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
         <ApkPreview file={file} />
       ) : file.fileType === "pdf" ? (
         <PdfPreview file={file} />
+      ) : file.fileType === "zip" ? (
+        <ZipPreview file={file} />
       ) : (
         // TODO: Handle other files
         <></>
