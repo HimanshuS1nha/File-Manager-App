@@ -31,6 +31,8 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
         router.push("/image-file");
       } else if (file.fileType === "video") {
         router.push("/video-file");
+      } else if (file.fileType === "audio") {
+        router.push("/audio-file");
       }
     }
   }, [file]);
