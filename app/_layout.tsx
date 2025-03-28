@@ -26,6 +26,8 @@ export default function RootLayout() {
             title: "File Manager",
           }}
         />
+
+        <Stack.Screen name="favourites" options={{ title: "Favourites" }} />
       </Stack>
     </QueryClientProvider>
   );

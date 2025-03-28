@@ -76,6 +76,7 @@ export const options = [
       Icon: FontAwesome,
       iconName: "star",
       title: "Favourites",
+      url: "/favourites",
     },
   ],
 ];
