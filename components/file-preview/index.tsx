@@ -4,6 +4,7 @@ import tw from "twrnc";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { router } from "expo-router";
 import ApkInstaller from "@dominicvonk/react-native-apk-installer";
+import { unzip } from "react-native-zip-archive";
 
 import ImagePreview from "./image-preview";
 import VideoPreview from "./video-preview";
@@ -26,11 +27,26 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
     });
   }, [file]);
 
+  const handleUnzip = useCallback(() => {
+    const folderName = file.name.split(".")[0];
+    const folderPath = file.path.replace(file.name, folderName);
+
+    unzip(file.path, folderPath).then(() =>
+      router.push({
+        pathname: "/folders",
+        params: {
+          type: folderName,
+          path: folderPath,
+        },
+      })
+    );
+  }, [file]);
+
   const handlePress = useCallback(() => {
     if (file.fileType === "apk") {
       handleInstallApk();
     } else if (file.fileType === "zip") {
-      // TODO: Initiate unzipping
+      handleUnzip();
     } else {
       setSelectedFile(file);
 
