@@ -1,6 +1,7 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Pressable } from "react-native";
 import React from "react";
 import tw from "twrnc";
+import { router } from "expo-router";
 
 import StorageCard from "@/components/storage-card";
 
@@ -18,7 +19,20 @@ const Home = () => {
               <View key={i} style={tw`flex-row justify-between items-center`}>
                 {option.map((item) => {
                   return (
-                    <View key={item.title} style={tw`items-center gap-y-2`}>
+                    <Pressable
+                      key={item.title}
+                      style={tw`items-center gap-y-2`}
+                      onPress={() => {
+                        if (item.params) {
+                          router.push({
+                            pathname: item.url as never,
+                            params: item.params,
+                          });
+                        } else {
+                          router.push(item.url as never);
+                        }
+                      }}
+                    >
                       <View
                         style={tw`size-16 items-center justify-center bg-white rounded-lg shadow-lg shadow-white`}
                       >
@@ -29,7 +43,7 @@ const Home = () => {
                         />
                       </View>
                       <Text style={tw`font-medium`}>{item.title}</Text>
-                    </View>
+                    </Pressable>
                   );
                 })}
               </View>
