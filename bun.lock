@@ -4,6 +4,7 @@
     "": {
       "name": "file-manager",
       "dependencies": {
+        "@dominicvonk/react-native-apk-installer": "^2.2.2",
         "@expo/vector-icons": "^14.0.2",
         "@react-native-async-storage/async-storage": "1.23.1",
         "@react-native-community/slider": "4.5.5",
@@ -323,6 +324,8 @@
     "@babel/types": ["@babel/types@7.27.0", "", { "dependencies": { "@babel/helper-string-parser": "^7.25.9", "@babel/helper-validator-identifier": "^7.25.9" } }, "sha512-H45s8fVLYjbhFH62dIJ3WtmJ6RSPt/3DRO0ZcT2SUiYiQyz3BLVb9ADEnLl91m74aQPS3AzzeajZHYOalWe3bg=="],
 
     "@bcoe/v8-coverage": ["@bcoe/v8-coverage@0.2.3", "", {}, "sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw=="],
+
+    "@dominicvonk/react-native-apk-installer": ["@dominicvonk/react-native-apk-installer@2.2.2", "", { "peerDependencies": { "react": "*", "react-native": ">=0.60.0-rc.0 <1.0.x" } }, "sha512-1JIqdVaER7P7tL//z2fEvbATcNPFgMzM88MncDZB6cr9CQl9RegbIwYiInlTDNkv+3lmAOvJ+LnCsvsYWyoX7w=="],
 
     "@egjs/hammerjs": ["@egjs/hammerjs@2.0.17", "", { "dependencies": { "@types/hammerjs": "^2.0.36" } }, "sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A=="],
 

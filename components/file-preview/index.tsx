@@ -1,8 +1,9 @@
-import { Pressable, View } from "react-native";
+import { Pressable, Alert } from "react-native";
 import React, { useCallback } from "react";
 import tw from "twrnc";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { router } from "expo-router";
+import ApkInstaller from "@dominicvonk/react-native-apk-installer";
 
 import ImagePreview from "./image-preview";
 import VideoPreview from "./video-preview";
@@ -19,9 +20,15 @@ import type { FileOrFolderType } from "@/types";
 const FilePreview = ({ file }: { file: FileOrFolderType }) => {
   const setSelectedFile = useSelectedFile((state) => state.setSelectedFile);
 
+  const handleInstallApk = useCallback(() => {
+    ApkInstaller.install(file.path).catch(() => {
+      Alert.alert("Error in installing the apk");
+    });
+  }, [file]);
+
   const handlePress = useCallback(() => {
     if (file.fileType === "apk") {
-      // TODO: Initiate installation
+      handleInstallApk();
     } else if (file.fileType === "zip") {
       // TODO: Initiate unzipping
     } else {
