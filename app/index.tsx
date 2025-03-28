@@ -22,8 +22,11 @@ import {
 } from "manage-external-storage";
 import * as Linking from "expo-linking";
 
+import { useFavourites } from "@/hooks/use-favourites";
+
 export default function Index() {
   const rootNavigationState = useRootNavigationState();
+  const getFavourites = useFavourites((state) => state.getFavourites);
 
   const requestPermission = useCallback(async () => {
     if (Platform.OS === "android") {
@@ -119,6 +122,7 @@ export default function Index() {
       requestPermission()
         .then((res) => {
           if (res) {
+            getFavourites();
             timeout = setTimeout(() => {
               router.replace("/home");
             }, 500);
