@@ -49,11 +49,19 @@ export const options = [
       Icon: AntDesign,
       iconName: "android1",
       title: "Apk",
+      url: "/files",
+      params: {
+        type: "Apk",
+      },
     },
     {
       Icon: FontAwesome,
       iconName: "file-zip-o",
       title: "Zip",
+      url: "/files",
+      params: {
+        type: "Zip",
+      },
     },
     {
       Icon: FontAwesome,
