@@ -1,7 +1,8 @@
-import { View } from "react-native";
-import React from "react";
+import { Pressable, View } from "react-native";
+import React, { useCallback } from "react";
 import tw from "twrnc";
 import { FontAwesome6 } from "@expo/vector-icons";
+import { router } from "expo-router";
 
 import ImagePreview from "./image-preview";
 import VideoPreview from "./video-preview";
@@ -11,11 +12,28 @@ import PdfPreview from "./pdf-preview";
 import ZipPreview from "./zip-preview";
 import OtherFilePreview from "./other-file-preview";
 
+import { useSelectedFile } from "@/hooks/use-selected-file";
+
 import type { FileOrFolderType } from "@/types";
 
 const FilePreview = ({ file }: { file: FileOrFolderType }) => {
+  const setSelectedFile = useSelectedFile((state) => state.setSelectedFile);
+
+  const handlePress = useCallback(() => {
+    if (file.fileType === "apk") {
+      // TODO: Initiate installation
+    } else if (file.fileType === "zip") {
+      // TODO: Initiate unzipping
+    } else {
+      setSelectedFile(file);
+
+      if (file.fileType === "image") {
+        router.push("/image-file");
+      }
+    }
+  }, [file]);
   return (
-    <View style={tw`flex-row items-center px-2 my-2.5`}>
+    <Pressable style={tw`flex-row items-center px-2 my-2.5`}>
       {file.fileType === "image" ? (
         <ImagePreview file={file} />
       ) : file.fileType === "video" ? (
@@ -33,7 +51,7 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
       )}
 
       <FontAwesome6 name="ellipsis-vertical" size={20} color="black" />
-    </View>
+    </Pressable>
   );
 };
 
