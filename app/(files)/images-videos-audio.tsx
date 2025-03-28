@@ -6,6 +6,8 @@ import * as FileSystem from "expo-file-system";
 import { useQuery } from "@tanstack/react-query";
 import { Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
 
+import CustomSectionList from "@/components/custom-section-list";
+
 import { groupAndSortByDate } from "@/utils/group-and-sort-by-date";
 import { getFileType } from "@/utils/get-file-type";
 
@@ -83,8 +85,7 @@ const ImagesVideosAudio = () => {
         {isLoading ? (
           <ActivityIndicator size={40} color={"blue"} />
         ) : files.length > 0 ? (
-          // TODO: Show all files here
-          <></>
+          <CustomSectionList data={files} onEndReached={refetch} />
         ) : (
           <View style={tw`items-center`}>
             <Text style={tw`text-rose-600 font-semibold`}>
