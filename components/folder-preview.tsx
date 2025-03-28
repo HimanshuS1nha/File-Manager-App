@@ -14,7 +14,7 @@ const FolderPreview = ({ folder }: { folder: FileOrFolderType }) => {
         router.push({
           pathname: "/folders",
           params: {
-            type: folder.name,
+            title: folder.name,
             path: folder.path,
           },
         })

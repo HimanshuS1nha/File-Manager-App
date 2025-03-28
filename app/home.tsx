@@ -36,6 +36,11 @@ const Home = () => {
             );
           })}
         </View>
+
+        <View style={tw`bg-white rounded-t-3xl py-5 px-3 gap-y-4 min-h-full`}>
+          <Text style={tw`text-lg font-semibold px-2`}>Recently Opened</Text>
+          {/* TODO: Render recently opened files here */}
+        </View>
       </View>
     </ScrollView>
   );
