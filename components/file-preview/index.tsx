@@ -29,11 +29,16 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
 
       if (file.fileType === "image") {
         router.push("/image-file");
+      } else if (file.fileType === "video") {
+        router.push("/video-file");
       }
     }
   }, [file]);
   return (
-    <Pressable style={tw`flex-row items-center px-2 my-2.5`}>
+    <Pressable
+      style={tw`flex-row items-center px-2 my-2.5`}
+      onPress={handlePress}
+    >
       {file.fileType === "image" ? (
         <ImagePreview file={file} />
       ) : file.fileType === "video" ? (

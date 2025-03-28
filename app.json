@@ -59,6 +59,13 @@
         {
           "iosPermissions": ["MediaLibrary", "PhotoLibrary"]
         }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
+        }
       ]
     ],
     "experiments": {
