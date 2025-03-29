@@ -43,7 +43,9 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
   }, [file]);
 
   const handlePress = useCallback(() => {
-    if (file.fileType === "apk") {
+    if (file.fileType === "other") {
+      Alert.alert("Error", "Unable to open file.");
+    } else if (file.fileType === "apk") {
       handleInstallApk();
     } else if (file.fileType === "zip") {
       Alert.alert("Unzip", "Do you want to unzip this file?", [
@@ -64,6 +66,8 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
         router.push("/video-file");
       } else if (file.fileType === "audio") {
         router.push("/audio-file");
+      } else if (file.fileType === "pdf") {
+        router.push("/pdf-file");
       }
     }
   }, [file]);
