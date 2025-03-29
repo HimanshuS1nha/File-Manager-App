@@ -55,26 +55,26 @@ const Home = () => {
             );
           })}
         </View>
+      </View>
 
-        <View style={tw`bg-white rounded-t-3xl py-5 px-3 gap-y-4 min-h-full`}>
-          <Text style={tw`text-lg font-semibold px-2`}>Recently Opened</Text>
-          {recentFiles.length > 0 ? (
-            <FlashList
-              data={recentFiles}
-              keyExtractor={(_, i) => i.toString()}
-              renderItem={({ item }) => {
-                return <FilePreview file={item} />;
-              }}
-              estimatedItemSize={10}
-            />
-          ) : (
-            <View style={tw`items-center`}>
-              <Text style={tw`text-rose-600 font-semibold`}>
-                No data to show.
-              </Text>
-            </View>
-          )}
-        </View>
+      <View style={tw`bg-white rounded-t-3xl py-5 px-3 gap-y-4 min-h-full`}>
+        <Text style={tw`text-lg font-semibold px-2`}>Recently Opened</Text>
+        {recentFiles.length > 0 ? (
+          <FlashList
+            data={recentFiles}
+            keyExtractor={(_, i) => i.toString()}
+            renderItem={({ item }) => {
+              return <FilePreview file={item} isSelectable={false} />;
+            }}
+            estimatedItemSize={10}
+          />
+        ) : (
+          <View style={tw`items-center`}>
+            <Text style={tw`text-rose-600 font-semibold`}>
+              No data to show.
+            </Text>
+          </View>
+        )}
       </View>
     </ScrollView>
   );

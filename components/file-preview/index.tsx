@@ -16,12 +16,23 @@ import OtherFilePreview from "./other-file-preview";
 
 import { useSelectedFile } from "@/hooks/use-selected-file";
 import { useRecentFiles } from "@/hooks/use-recent-files";
+import { useSelectedItems } from "@/hooks/use-selected-items";
 
 import type { FileOrFolderType } from "@/types";
 
-const FilePreview = ({ file }: { file: FileOrFolderType }) => {
+const FilePreview = ({
+  file,
+  isSelectable = true,
+}: {
+  file: FileOrFolderType;
+  isSelectable?: boolean;
+}) => {
   const setSelectedFile = useSelectedFile((state) => state.setSelectedFile);
   const updateRecentFiles = useRecentFiles((state) => state.updateRecentFiles);
+  const selectedItems = useSelectedItems((state) => state.selectedItems);
+  const updateSelectedItems = useSelectedItems(
+    (state) => state.updateSelectedItems
+  );
 
   const handleInstallApk = useCallback(() => {
     ApkInstaller.install(file.path).catch(() => {
@@ -45,39 +56,50 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
   }, [file]);
 
   const handlePress = useCallback(() => {
-    if (file.fileType === "other") {
-      Alert.alert("Error", "Unable to open file.");
-    } else if (file.fileType === "apk") {
-      handleInstallApk();
-    } else if (file.fileType === "zip") {
-      Alert.alert("Unzip", "Do you want to unzip this file?", [
-        {
-          text: "No",
-        },
-        {
-          text: "Yes",
-          onPress: handleUnzip,
-        },
-      ]);
+    if (selectedItems.length > 0) {
+      updateSelectedItems(file);
     } else {
-      setSelectedFile(file);
-      updateRecentFiles(file);
+      if (file.fileType === "other") {
+        Alert.alert("Error", "Unable to open file.");
+      } else if (file.fileType === "apk") {
+        handleInstallApk();
+      } else if (file.fileType === "zip") {
+        Alert.alert("Unzip", "Do you want to unzip this file?", [
+          {
+            text: "No",
+          },
+          {
+            text: "Yes",
+            onPress: handleUnzip,
+          },
+        ]);
+      } else {
+        setSelectedFile(file);
+        updateRecentFiles(file);
 
-      if (file.fileType === "image") {
-        router.push("/image-file");
-      } else if (file.fileType === "video") {
-        router.push("/video-file");
-      } else if (file.fileType === "audio") {
-        router.push("/audio-file");
-      } else if (file.fileType === "pdf") {
-        router.push("/pdf-file");
+        if (file.fileType === "image") {
+          router.push("/image-file");
+        } else if (file.fileType === "video") {
+          router.push("/video-file");
+        } else if (file.fileType === "audio") {
+          router.push("/audio-file");
+        } else if (file.fileType === "pdf") {
+          router.push("/pdf-file");
+        }
       }
+    }
+  }, [file]);
+
+  const handleLongPress = useCallback(() => {
+    if (isSelectable) {
+      updateSelectedItems(file);
     }
   }, [file]);
   return (
     <Pressable
       style={tw`flex-row items-center px-2 py-2 my-0.5`}
       onPress={handlePress}
+      onLongPress={handleLongPress}
     >
       {file.fileType === "image" ? (
         <ImagePreview file={file} />
