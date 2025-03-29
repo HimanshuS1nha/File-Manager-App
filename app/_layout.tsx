@@ -28,10 +28,10 @@ export default function RootLayout() {
           }}
         />
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="favourites"
           options={{ title: "Favourites", headerShown: true }}
-        />
+        /> */}
       </Stack>
     </QueryClientProvider>
   );
