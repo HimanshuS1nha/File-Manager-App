@@ -9,12 +9,12 @@ export default function RootLayout() {
       <Stack
         screenOptions={{
           statusBarStyle: "dark",
+          headerShown: false,
         }}
       >
         <Stack.Screen
           name="index"
           options={{
-            headerShown: false,
             statusBarBackgroundColor: "#4F46E5",
             statusBarStyle: "light",
           }}
@@ -24,14 +24,14 @@ export default function RootLayout() {
           name="home"
           options={{
             title: "File Manager",
+            headerShown: true,
           }}
         />
 
-        <Stack.Screen name="favourites" options={{ title: "Favourites" }} />
-
-        <Stack.Screen name="(folders)" options={{ headerShown: false }} />
-
-        <Stack.Screen name="(file)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="favourites"
+          options={{ title: "Favourites", headerShown: true }}
+        />
       </Stack>
     </QueryClientProvider>
   );

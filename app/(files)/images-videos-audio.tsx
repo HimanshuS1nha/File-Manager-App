@@ -8,12 +8,16 @@ import { Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
 
 import CustomSectionList from "@/components/custom-section-list";
 
+import { useSelectedItems } from "@/hooks/use-selected-items";
+
 import { groupAndSortByDate } from "@/utils/group-and-sort-by-date";
 import { getFileType } from "@/utils/get-file-type";
 
 import type { FileOrFolderType } from "@/types";
 
 const ImagesVideosAudio = () => {
+  const selectedItems = useSelectedItems((state) => state.selectedItems);
+
   const { type } = useLocalSearchParams() as {
     type: "Images" | "Videos" | "Audio";
   };
@@ -79,7 +83,14 @@ const ImagesVideosAudio = () => {
   );
   return (
     <View style={tw`flex-1 bg-white`}>
-      <Stack.Screen options={{ title: type }} />
+      <Stack.Screen
+        options={{
+          title:
+            selectedItems.length > 0
+              ? `${selectedItems.length} selected`
+              : type,
+        }}
+      />
 
       <View style={tw`px-2 pt-1.5`}>
         {isLoading ? (
