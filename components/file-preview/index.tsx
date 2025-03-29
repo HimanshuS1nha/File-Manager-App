@@ -76,7 +76,7 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
   }, [file]);
   return (
     <Pressable
-      style={tw`flex-row items-center px-2 my-2.5`}
+      style={tw`flex-row items-center px-2 py-2 my-0.5`}
       onPress={handlePress}
     >
       {file.fileType === "image" ? (
