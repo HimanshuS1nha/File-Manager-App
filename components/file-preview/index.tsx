@@ -46,7 +46,15 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
     if (file.fileType === "apk") {
       handleInstallApk();
     } else if (file.fileType === "zip") {
-      handleUnzip();
+      Alert.alert("Unzip", "Do you want to unzip this file?", [
+        {
+          text: "No",
+        },
+        {
+          text: "Yes",
+          onPress: handleUnzip,
+        },
+      ]);
     } else {
       setSelectedFile(file);
 
