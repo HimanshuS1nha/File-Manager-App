@@ -5,11 +5,16 @@ import { Stack, router } from "expo-router";
 import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
+import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
 
 const FilesLayout = () => {
   const selectedItems = useSelectedItems((state) => state.selectedItems);
   const clearSelectedItems = useSelectedItems(
     (state) => state.clearSelectedItems
+  );
+
+  const setIsMenuDropdownVisible = useMenuDropdown(
+    (state) => state.setIsVisible
   );
   return (
     <Stack
@@ -37,7 +42,13 @@ const FilesLayout = () => {
                   <FontAwesome6 name="trash" size={24} color="black" />
                 </>
               )}
-              <FontAwesome6 name="ellipsis-vertical" size={24} color="black" />
+              <Pressable onPress={() => setIsMenuDropdownVisible(true)}>
+                <FontAwesome6
+                  name="ellipsis-vertical"
+                  size={24}
+                  color="black"
+                />
+              </Pressable>
             </View>
           );
         },
