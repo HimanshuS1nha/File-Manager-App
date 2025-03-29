@@ -15,11 +15,13 @@ import ZipPreview from "./zip-preview";
 import OtherFilePreview from "./other-file-preview";
 
 import { useSelectedFile } from "@/hooks/use-selected-file";
+import { useRecentFiles } from "@/hooks/use-recent-files";
 
 import type { FileOrFolderType } from "@/types";
 
 const FilePreview = ({ file }: { file: FileOrFolderType }) => {
   const setSelectedFile = useSelectedFile((state) => state.setSelectedFile);
+  const updateRecentFiles = useRecentFiles((state) => state.updateRecentFiles);
 
   const handleInstallApk = useCallback(() => {
     ApkInstaller.install(file.path).catch(() => {
@@ -59,6 +61,7 @@ const FilePreview = ({ file }: { file: FileOrFolderType }) => {
       ]);
     } else {
       setSelectedFile(file);
+      updateRecentFiles(file);
 
       if (file.fileType === "image") {
         router.push("/image-file");
