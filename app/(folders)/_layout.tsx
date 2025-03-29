@@ -1,6 +1,6 @@
 import { View, Pressable } from "react-native";
 import tw from "twrnc";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
@@ -21,7 +21,7 @@ const FoldersLayout = () => {
                   <AntDesign name="close" size={24} color={"black"} />
                 </Pressable>
               ) : (
-                <Pressable style={tw`mr-5`} onPress={clearSelectedItems}>
+                <Pressable style={tw`mr-5`} onPress={router.back}>
                   <AntDesign name="arrowleft" size={24} color="black" />
                 </Pressable>
               )}

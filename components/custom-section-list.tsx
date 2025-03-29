@@ -1,10 +1,12 @@
-import { View, Text, SectionList } from "react-native";
-import React from "react";
+import { View, Text, SectionList, Pressable } from "react-native";
+import React, { useCallback } from "react";
 import tw from "twrnc";
 import { AntDesign } from "@expo/vector-icons";
 
 import FilePreview from "./file-preview";
 import FolderPreview from "./folder-preview";
+
+import { useSelectedItems } from "@/hooks/use-selected-items";
 
 import { days } from "@/constants/days";
 import { months } from "@/constants/months";
@@ -18,6 +20,22 @@ const CustomSectionList = ({
   data: { title: Date; data: FileOrFolderType[] }[];
   onEndReached?: () => void;
 }) => {
+  const updateSelectedItems = useSelectedItems(
+    (state) => state.updateSelectedItems
+  );
+
+  const handlePress = useCallback(
+    (title: Date) => {
+      data.map((item) => {
+        if (item.title === title) {
+          for (const ele of item.data) {
+            updateSelectedItems(ele);
+          }
+        }
+      });
+    },
+    [data]
+  );
   return (
     <SectionList
       sections={data}
@@ -39,7 +57,9 @@ const CustomSectionList = ({
             {days[title.getDay()]}, {months[title.getMonth()]}{" "}
             {title.getDate().toString().padStart(2, "0")}
           </Text>
-          <AntDesign name="checkcircleo" size={20} color="black" />
+          <Pressable onPress={() => handlePress(title)}>
+            <AntDesign name="checkcircleo" size={20} color="black" />
+          </Pressable>
         </View>
       )}
       showsVerticalScrollIndicator={false}

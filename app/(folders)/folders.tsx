@@ -7,10 +7,14 @@ import { readDir, ExternalStorageDirectoryPath } from "react-native-fs";
 
 import CustomSectionList from "@/components/custom-section-list";
 
+import { useSelectedItems } from "@/hooks/use-selected-items";
+
 import { groupAndSortByDate } from "@/utils/group-and-sort-by-date";
 import { getFileType } from "@/utils/get-file-type";
 
 const Folders = () => {
+  const selectedItems = useSelectedItems((state) => state.selectedItems);
+
   const { title, path } = useLocalSearchParams() as {
     title: string;
     path?: string;
@@ -40,7 +44,14 @@ const Folders = () => {
   });
   return (
     <View style={tw`flex-1 bg-white`}>
-      <Stack.Screen options={{ title }} />
+      <Stack.Screen
+        options={{
+          title:
+            selectedItems.length > 0
+              ? `${selectedItems.length} selected`
+              : title,
+        }}
+      />
 
       <View style={tw`px-2 pt-1.5`}>
         {isLoading ? (

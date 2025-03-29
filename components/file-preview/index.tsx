@@ -1,7 +1,7 @@
 import { Pressable, Alert } from "react-native";
 import React, { useCallback, useMemo } from "react";
 import tw from "twrnc";
-import { FontAwesome6 } from "@expo/vector-icons";
+import { FontAwesome6, AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 import ApkInstaller from "@dominicvonk/react-native-apk-installer";
 import { unzip } from "react-native-zip-archive";
@@ -126,7 +126,11 @@ const FilePreview = ({
         <OtherFilePreview file={file} />
       )}
 
-      <FontAwesome6 name="ellipsis-vertical" size={20} color="black" />
+      {isFileSelected ? (
+        <AntDesign name="checkcircle" size={20} color="blue" />
+      ) : (
+        <FontAwesome6 name="ellipsis-vertical" size={20} color="black" />
+      )}
     </Pressable>
   );
 };
