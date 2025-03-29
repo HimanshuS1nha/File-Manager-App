@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import Pdf from "react-native-pdf";
@@ -19,6 +19,7 @@ const PdfFile = () => {
           headerStyle: {
             backgroundColor: "#fff",
           },
+          headerLeft: () => null,
         }}
       />
 

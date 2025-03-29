@@ -12,7 +12,7 @@ import { useFavourites } from "@/hooks/use-favourites";
 const FileLayout = () => {
   const selectedFile = useSelectedFile((state) => state.selectedFile);
   const setSelectedFile = useSelectedFile((state) => state.setSelectedFile);
-  
+
   const favourites = useFavourites((state) => state.favourites);
   const updateFavourites = useFavourites((state) => state.updateFavourites);
 
@@ -72,7 +72,34 @@ const FileLayout = () => {
           );
         },
       }}
-    />
+    >
+      <Stack.Screen
+        name="pdf-file"
+        options={{
+          headerRight: () => {
+            return (
+              <View style={tw`flex-row gap-x-5 items-center`}>
+                <Pressable onPress={handleShare}>
+                  <AntDesign name="sharealt" size={24} color="black" />
+                </Pressable>
+                <Pressable onPress={() => updateFavourites(selectedFile!)}>
+                  <AntDesign
+                    name={isFavourite ? "star" : "staro"}
+                    size={24}
+                    color="black"
+                  />
+                </Pressable>
+                <FontAwesome6
+                  name="ellipsis-vertical"
+                  size={24}
+                  color="black"
+                />
+              </View>
+            );
+          },
+        }}
+      />
+    </Stack>
   );
 };
 
