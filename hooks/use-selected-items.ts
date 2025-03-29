@@ -5,6 +5,7 @@ import type { FileOrFolderType } from "@/types";
 type UseSelectedItemsType = {
   selectedItems: FileOrFolderType[];
   updateSelectedItems: (selectedItem: FileOrFolderType) => void;
+  clearSelectedItems: () => void;
 };
 
 export const useSelectedItems = create<UseSelectedItemsType>((set) => ({
@@ -24,4 +25,5 @@ export const useSelectedItems = create<UseSelectedItemsType>((set) => ({
       return { selectedItems: Array.from(selectedItemsMap.values()) };
     });
   },
+  clearSelectedItems: () => set({ selectedItems: [] }),
 }));

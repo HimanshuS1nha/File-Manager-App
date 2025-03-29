@@ -4,15 +4,20 @@ import tw from "twrnc";
 import { useQuery } from "@tanstack/react-query";
 import { readDir, ExternalStorageDirectoryPath } from "react-native-fs";
 import { FlashList } from "@shopify/flash-list";
+import { Stack } from "expo-router";
 
 import FolderPreview from "@/components/folder-preview";
 import FilePreview from "@/components/file-preview";
+
+import { useSelectedItems } from "@/hooks/use-selected-items";
 
 import { getFileType } from "@/utils/get-file-type";
 
 import type { FileOrFolderType } from "@/types";
 
 const InternalStorage = () => {
+  const selectedItems = useSelectedItems((state) => state.selectedItems);
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["get-internal-storage"],
     queryFn: async () => {
@@ -41,6 +46,15 @@ const InternalStorage = () => {
   }
   return (
     <View style={tw`flex-1 bg-white px-2 pt-1.5`}>
+      <Stack.Screen
+        options={{
+          title:
+            selectedItems.length > 0
+              ? `${selectedItems.length} selected`
+              : "Internal Storage",
+        }}
+      />
+
       {isLoading ? (
         <ActivityIndicator size={40} color={"blue"} />
       ) : data && data.length > 0 ? (
@@ -58,6 +72,8 @@ const InternalStorage = () => {
               </>
             );
           }}
+          estimatedItemSize={50}
+          showsVerticalScrollIndicator={false}
         />
       ) : (
         <View style={tw`items-center`}>

@@ -12,6 +12,7 @@ import { useFavourites } from "@/hooks/use-favourites";
 const FileLayout = () => {
   const selectedFile = useSelectedFile((state) => state.selectedFile);
   const setSelectedFile = useSelectedFile((state) => state.setSelectedFile);
+  
   const favourites = useFavourites((state) => state.favourites);
   const updateFavourites = useFavourites((state) => state.updateFavourites);
 

@@ -1,5 +1,5 @@
 import { Pressable, Alert } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import tw from "twrnc";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -28,10 +28,17 @@ const FilePreview = ({
   isSelectable?: boolean;
 }) => {
   const setSelectedFile = useSelectedFile((state) => state.setSelectedFile);
+
   const updateRecentFiles = useRecentFiles((state) => state.updateRecentFiles);
+
   const selectedItems = useSelectedItems((state) => state.selectedItems);
   const updateSelectedItems = useSelectedItems(
     (state) => state.updateSelectedItems
+  );
+
+  const isFileSelected = useMemo(
+    () => !!selectedItems.find((selectedItem) => selectedItem.id === file.id),
+    [selectedItems, file]
   );
 
   const handleInstallApk = useCallback(() => {
@@ -88,7 +95,7 @@ const FilePreview = ({
         }
       }
     }
-  }, [file]);
+  }, [file, selectedItems]);
 
   const handleLongPress = useCallback(() => {
     if (isSelectable) {
@@ -97,7 +104,9 @@ const FilePreview = ({
   }, [file]);
   return (
     <Pressable
-      style={tw`flex-row items-center px-2 py-2 my-0.5`}
+      style={tw`flex-row items-center px-2 py-2 my-0.5 ${
+        isFileSelected ? "bg-indigo-100 rounded-lg" : ""
+      }`}
       onPress={handlePress}
       onLongPress={handleLongPress}
     >
