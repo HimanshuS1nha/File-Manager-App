@@ -2,12 +2,17 @@ import { View, Text, ScrollView, Pressable } from "react-native";
 import React from "react";
 import tw from "twrnc";
 import { router } from "expo-router";
+import { FlashList } from "@shopify/flash-list";
 
 import StorageCard from "@/components/storage-card";
+import FilePreview from "@/components/file-preview";
+
+import { useRecentFiles } from "@/hooks/use-recent-files";
 
 import { options } from "@/constants/options";
 
 const Home = () => {
+  const recentFiles = useRecentFiles((state) => state.recentFiles);
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={tw`p-5 gap-y-6`}>
@@ -53,7 +58,22 @@ const Home = () => {
 
         <View style={tw`bg-white rounded-t-3xl py-5 px-3 gap-y-4 min-h-full`}>
           <Text style={tw`text-lg font-semibold px-2`}>Recently Opened</Text>
-          {/* TODO: Render recently opened files here */}
+          {recentFiles.length > 0 ? (
+            <FlashList
+              data={recentFiles}
+              keyExtractor={(_, i) => i.toString()}
+              renderItem={({ item }) => {
+                return <FilePreview file={item} />;
+              }}
+              estimatedItemSize={10}
+            />
+          ) : (
+            <View style={tw`items-center`}>
+              <Text style={tw`text-rose-600 font-semibold`}>
+                No data to show.
+              </Text>
+            </View>
+          )}
         </View>
       </View>
     </ScrollView>
