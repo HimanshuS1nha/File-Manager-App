@@ -3,11 +3,15 @@ import React from "react";
 import tw from "twrnc";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
-
 import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
+import { useCreateFolderModal } from "@/hooks/use-create-folder-modal";
 
 const MenuDropdown = () => {
   const selectedItems = useSelectedItems((state) => state.selectedItems);
+
+  const setIsCreateFolderModalVisible = useCreateFolderModal(
+    (state) => state.setIsVisible
+  );
 
   const { isVisible, setIsVisible } = useMenuDropdown();
   return (
@@ -33,7 +37,7 @@ const MenuDropdown = () => {
               </Pressable>
             </>
           ) : (
-            <Pressable>
+            <Pressable onPress={() => setIsCreateFolderModalVisible(true)}>
               <Text style={tw`text-base`}>New folder</Text>
             </Pressable>
           )}

@@ -23,7 +23,7 @@ const FilesAndFoldersLayout = () => {
     (state) => state.setIsVisible
   );
 
-  const handleDeleteFile = useCallback(async (path: string) => {
+  const handleDeleteItem = useCallback(async (path: string) => {
     await unlink(path);
   }, []);
 
@@ -33,13 +33,13 @@ const FilesAndFoldersLayout = () => {
     for (const ele of filesAndFolders) {
       if (ele.isDirectory()) {
         await handleDeleteFolder(ele.path);
-        await unlink(ele.path);
+        await handleDeleteItem(ele.path);
       } else {
-        handleDeleteFile(ele.path);
+        handleDeleteItem(ele.path);
       }
     }
 
-    await unlink(path);
+    await handleDeleteItem(path);
   }, []);
 
   const { mutate: handleDeleteSelectedItems, isPending } = useMutation({
@@ -47,7 +47,7 @@ const FilesAndFoldersLayout = () => {
     mutationFn: async () => {
       for (const selectedItem of selectedItems) {
         if (selectedItem.type === "file") {
-          await handleDeleteFile(selectedItem.path);
+          await handleDeleteItem(selectedItem.path);
         } else {
           await handleDeleteFolder(selectedItem.path);
         }
@@ -57,7 +57,7 @@ const FilesAndFoldersLayout = () => {
       await queryClient.invalidateQueries();
       clearSelectedItems();
     },
-    onError: () => {
+    onError: (error) => {
       Alert.alert("Error", "Error while deleting the items");
     },
   });
@@ -88,7 +88,7 @@ const FilesAndFoldersLayout = () => {
                     onPress={() =>
                       Alert.alert(
                         "Warning",
-                        "Do you want to delete thses items?",
+                        "Do you want to delete these items?",
                         [
                           {
                             text: "No",

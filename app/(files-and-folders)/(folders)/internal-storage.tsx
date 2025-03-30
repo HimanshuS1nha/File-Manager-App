@@ -8,6 +8,7 @@ import { Stack } from "expo-router";
 
 import FolderPreview from "@/components/folder-preview";
 import FilePreview from "@/components/file-preview";
+import CreateFolderModal from "@/components/modal/create-folder-modal";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 
@@ -54,6 +55,8 @@ const InternalStorage = () => {
               : "Internal Storage",
         }}
       />
+
+      <CreateFolderModal path={ExternalStorageDirectoryPath} />
 
       {isLoading ? (
         <ActivityIndicator size={40} color={"blue"} />
