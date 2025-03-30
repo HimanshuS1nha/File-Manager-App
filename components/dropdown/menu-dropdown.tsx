@@ -4,14 +4,12 @@ import tw from "twrnc";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 
-const MenuDropdown = ({
-  isVisible,
-  setIsVisible,
-}: {
-  isVisible: boolean;
-  setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
+
+const MenuDropdown = () => {
   const selectedItems = useSelectedItems((state) => state.selectedItems);
+
+  const { isVisible, setIsVisible } = useMenuDropdown();
   return (
     <Modal
       transparent

@@ -5,6 +5,7 @@ import { FontAwesome6, AntDesign } from "@expo/vector-icons";
 import { router } from "expo-router";
 import ApkInstaller from "@dominicvonk/react-native-apk-installer";
 import { unzip } from "react-native-zip-archive";
+import { useQueryClient } from "@tanstack/react-query";
 
 import ImagePreview from "./image-preview";
 import VideoPreview from "./video-preview";
@@ -27,6 +28,8 @@ const FilePreview = ({
   file: FileOrFolderType;
   isSelectable?: boolean;
 }) => {
+  const queryClient = useQueryClient();
+
   const setSelectedFile = useSelectedFile((state) => state.setSelectedFile);
 
   const updateRecentFiles = useRecentFiles((state) => state.updateRecentFiles);
@@ -47,19 +50,13 @@ const FilePreview = ({
     });
   }, [file]);
 
-  const handleUnzip = useCallback(() => {
+  const handleUnzip = useCallback(async () => {
     const folderName = file.name.split(".")[0];
     const folderPath = file.path.replace(file.name, folderName);
 
-    unzip(file.path, folderPath).then(() =>
-      router.push({
-        pathname: "/folders",
-        params: {
-          type: folderName,
-          path: folderPath,
-        },
-      })
-    );
+    await unzip(file.path, folderPath);
+
+    await queryClient.invalidateQueries();
   }, [file]);
 
   const handlePress = useCallback(() => {
