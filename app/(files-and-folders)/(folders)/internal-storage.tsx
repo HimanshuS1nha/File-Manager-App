@@ -9,6 +9,7 @@ import { Stack } from "expo-router";
 import FolderPreview from "@/components/folder-preview";
 import FilePreview from "@/components/file-preview";
 import CreateFolderModal from "@/components/modal/create-folder-modal";
+import CreateZipModal from "@/components/modal/create-zip-modal";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 
@@ -57,6 +58,8 @@ const InternalStorage = () => {
       />
 
       <CreateFolderModal path={ExternalStorageDirectoryPath} />
+
+      <CreateZipModal path={ExternalStorageDirectoryPath} />
 
       {isLoading ? (
         <ActivityIndicator size={40} color={"blue"} />

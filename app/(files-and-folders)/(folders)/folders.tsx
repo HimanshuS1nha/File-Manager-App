@@ -6,7 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import { readDir, ExternalStorageDirectoryPath } from "react-native-fs";
 
 import CustomSectionList from "@/components/custom-section-list";
-import CreateFolderModal  from "@/components/modal/create-folder-modal";
+import CreateFolderModal from "@/components/modal/create-folder-modal";
+import CreateZipModal from "@/components/modal/create-zip-modal";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 
@@ -54,7 +55,13 @@ const Folders = () => {
         }}
       />
 
-      <CreateFolderModal path={path??`${ExternalStorageDirectoryPath}/${title}`}/>
+      <CreateFolderModal
+        path={path ?? `${ExternalStorageDirectoryPath}/${title}`}
+      />
+
+      <CreateZipModal
+        path={path ?? `${ExternalStorageDirectoryPath}/${title}`}
+      />
 
       <View style={tw`px-2 pt-1.5`}>
         {isLoading ? (

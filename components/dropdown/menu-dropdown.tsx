@@ -5,11 +5,16 @@ import tw from "twrnc";
 import { useSelectedItems } from "@/hooks/use-selected-items";
 import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
 import { useCreateFolderModal } from "@/hooks/use-create-folder-modal";
+import { useCreateZipModal } from "@/hooks/use-create-zip-modal";
 
 const MenuDropdown = () => {
   const selectedItems = useSelectedItems((state) => state.selectedItems);
 
   const setIsCreateFolderModalVisible = useCreateFolderModal(
+    (state) => state.setIsVisible
+  );
+
+  const setIsCreateZipModalVisible = useCreateZipModal(
     (state) => state.setIsVisible
   );
 
@@ -19,6 +24,7 @@ const MenuDropdown = () => {
       transparent
       visible={isVisible}
       onRequestClose={() => setIsVisible(false)}
+      animationType="fade"
     >
       <Pressable style={tw`flex-1`} onPress={() => setIsVisible(false)}>
         <View
@@ -32,12 +38,22 @@ const MenuDropdown = () => {
               <Pressable>
                 <Text style={tw`text-base`}>Copy to</Text>
               </Pressable>
-              <Pressable>
+              <Pressable
+                onPress={() => {
+                  setIsVisible(false);
+                  setIsCreateZipModalVisible(true);
+                }}
+              >
                 <Text style={tw`text-base`}>Add to Zip</Text>
               </Pressable>
             </>
           ) : (
-            <Pressable onPress={() => setIsCreateFolderModalVisible(true)}>
+            <Pressable
+              onPress={() => {
+                setIsVisible(false);
+                setIsCreateFolderModalVisible(true);
+              }}
+            >
               <Text style={tw`text-base`}>New folder</Text>
             </Pressable>
           )}
