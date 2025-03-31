@@ -7,6 +7,7 @@ import { readDir, unlink } from "react-native-fs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import MenuDropdown from "@/components/dropdown/menu-dropdown";
+import FilePreviewDropdown from "@/components/dropdown/file-preview-dropdown";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
@@ -121,6 +122,8 @@ const FilesAndFoldersLayout = () => {
       />
 
       <MenuDropdown hideSomeOptions={pathname !== "/folders"} />
+
+      <FilePreviewDropdown />
     </>
   );
 };

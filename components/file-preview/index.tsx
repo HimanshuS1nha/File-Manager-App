@@ -1,4 +1,4 @@
-import { Pressable, Alert } from "react-native";
+import { Pressable, Alert, type GestureResponderEvent } from "react-native";
 import React, { useCallback, useMemo } from "react";
 import tw from "twrnc";
 import { FontAwesome6, AntDesign } from "@expo/vector-icons";
@@ -18,6 +18,7 @@ import OtherFilePreview from "./other-file-preview";
 import { useSelectedFile } from "@/hooks/use-selected-file";
 import { useRecentFiles } from "@/hooks/use-recent-files";
 import { useSelectedItems } from "@/hooks/use-selected-items";
+import { useFilePreviewDropdown } from "@/hooks/use-file-preview-dropdown";
 
 import type { FileOrFolderType } from "@/types";
 
@@ -37,6 +38,14 @@ const FilePreview = ({
   const selectedItems = useSelectedItems((state) => state.selectedItems);
   const updateSelectedItems = useSelectedItems(
     (state) => state.updateSelectedItems
+  );
+
+  const setIsFilePreviewDropdownVisible = useFilePreviewDropdown(
+    (state) => state.setIsVisible
+  );
+  const setPosition = useFilePreviewDropdown((state) => state.setPosition);
+  const setSelectedFilePath = useFilePreviewDropdown(
+    (state) => state.setSelectedFilePath
   );
 
   const isFileSelected = useMemo(
@@ -99,6 +108,17 @@ const FilePreview = ({
       updateSelectedItems(file);
     }
   }, [file]);
+
+  const handleOpenFilePreviewDropdown = useCallback(
+    (event: GestureResponderEvent) => {
+      const { pageX, pageY } = event.nativeEvent;
+
+      setPosition({ top: pageY + 11, left: pageX - 155 });
+      setSelectedFilePath(file.path);
+      setIsFilePreviewDropdownVisible(true);
+    },
+    [file]
+  );
   return (
     <Pressable
       style={tw`flex-row items-center px-2 py-2 my-0.5 ${
@@ -126,7 +146,9 @@ const FilePreview = ({
       {isFileSelected ? (
         <AntDesign name="checkcircle" size={20} color="blue" />
       ) : (
-        <FontAwesome6 name="ellipsis-vertical" size={20} color="black" />
+        <Pressable onPress={handleOpenFilePreviewDropdown}>
+          <FontAwesome6 name="ellipsis-vertical" size={20} color="black" />
+        </Pressable>
       )}
     </Pressable>
   );
