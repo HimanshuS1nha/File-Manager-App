@@ -1,10 +1,14 @@
-import { View, Text, Modal, Pressable } from "react-native";
+import { View, Text, Modal, Pressable, Alert } from "react-native";
 import React, { useCallback } from "react";
 import tw from "twrnc";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { unlink } from "react-native-fs";
 
 import { useFilePreviewDropdown } from "@/hooks/use-file-preview-dropdown";
 
 const FilePreviewDropdown = () => {
+  const queryClient = useQueryClient();
+
   const {
     isVisible,
     position,
@@ -19,6 +23,20 @@ const FilePreviewDropdown = () => {
     setSelectedFilePath(null);
     setIsVisible(false);
   }, []);
+
+  const { mutate: handleDeleteFile, isPending } = useMutation({
+    mutationKey: ["delete-file"],
+    mutationFn: async () => {
+      await unlink(selectedFilePath!);
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries();
+      handleClose();
+    },
+    onError: () => {
+      Alert.alert("Error", "Error in deleting file");
+    },
+  });
   return (
     <Modal
       transparent
@@ -39,7 +57,7 @@ const FilePreviewDropdown = () => {
           <Pressable>
             <Text style={tw`text-base`}>Copy to</Text>
           </Pressable>
-          <Pressable>
+          <Pressable onPress={() => handleDeleteFile()} disabled={isPending}>
             <Text style={tw`text-base`}>Delete</Text>
           </Pressable>
         </View>
