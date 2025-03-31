@@ -1,7 +1,7 @@
 import { View, Pressable, Alert } from "react-native";
 import React, { useCallback } from "react";
 import tw from "twrnc";
-import { Stack, router } from "expo-router";
+import { Stack, router, usePathname } from "expo-router";
 import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
 import { readDir, unlink } from "react-native-fs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
 
 const FilesAndFoldersLayout = () => {
   const queryClient = useQueryClient();
+  const pathname = usePathname();
 
   const selectedItems = useSelectedItems((state) => state.selectedItems);
   const clearSelectedItems = useSelectedItems(
@@ -119,7 +120,7 @@ const FilesAndFoldersLayout = () => {
         }}
       />
 
-      <MenuDropdown />
+      <MenuDropdown hideSomeOptions={pathname !== "/folders"} />
     </>
   );
 };

@@ -7,7 +7,7 @@ import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
 import { useCreateFolderModal } from "@/hooks/use-create-folder-modal";
 import { useCreateZipModal } from "@/hooks/use-create-zip-modal";
 
-const MenuDropdown = () => {
+const MenuDropdown = ({ hideSomeOptions }: { hideSomeOptions: boolean }) => {
   const selectedItems = useSelectedItems((state) => state.selectedItems);
 
   const setIsCreateFolderModalVisible = useCreateFolderModal(
@@ -30,33 +30,35 @@ const MenuDropdown = () => {
         <View
           style={tw`absolute right-2 top-[6%] bg-white shadow-lg shadow-black p-4 rounded-lg justify-center w-[40%] gap-y-5`}
         >
-          {selectedItems.length > 0 ? (
-            <>
-              <Pressable>
-                <Text style={tw`text-base`}>Move to</Text>
-              </Pressable>
-              <Pressable>
-                <Text style={tw`text-base`}>Copy to</Text>
-              </Pressable>
-              <Pressable
-                onPress={() => {
-                  setIsVisible(false);
-                  setIsCreateZipModalVisible(true);
-                }}
-              >
-                <Text style={tw`text-base`}>Add to Zip</Text>
-              </Pressable>
-            </>
-          ) : (
-            <Pressable
-              onPress={() => {
-                setIsVisible(false);
-                setIsCreateFolderModalVisible(true);
-              }}
-            >
-              <Text style={tw`text-base`}>New folder</Text>
-            </Pressable>
-          )}
+          {selectedItems.length > 0
+            ? !hideSomeOptions && (
+                <>
+                  <Pressable>
+                    <Text style={tw`text-base`}>Move to</Text>
+                  </Pressable>
+                  <Pressable>
+                    <Text style={tw`text-base`}>Copy to</Text>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      setIsVisible(false);
+                      setIsCreateZipModalVisible(true);
+                    }}
+                  >
+                    <Text style={tw`text-base`}>Add to Zip</Text>
+                  </Pressable>
+                </>
+              )
+            : !hideSomeOptions && (
+                <Pressable
+                  onPress={() => {
+                    setIsVisible(false);
+                    setIsCreateFolderModalVisible(true);
+                  }}
+                >
+                  <Text style={tw`text-base`}>New folder</Text>
+                </Pressable>
+              )}
           <Pressable>
             <Text style={tw`text-base`}>Select all</Text>
           </Pressable>
