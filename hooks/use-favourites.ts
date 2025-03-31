@@ -7,11 +7,12 @@ import type { FileOrFolderType } from "@/types";
 type UseFavouritesType = {
   favourites: FileOrFolderType[];
   updateFavourites: (favourite: FileOrFolderType) => void;
+  contains: (filePath: FileOrFolderType) => boolean;
 };
 
 export const useFavourites = create<UseFavouritesType>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       favourites: [],
       updateFavourites: (favourite) => {
         set((prev) => {
@@ -27,6 +28,9 @@ export const useFavourites = create<UseFavouritesType>()(
 
           return { favourites: Array.from(favouritesMap.values()) };
         });
+      },
+      contains: (file) => {
+        return !!get().favourites.find((favourite) => favourite.id === file.id);
       },
     }),
     {

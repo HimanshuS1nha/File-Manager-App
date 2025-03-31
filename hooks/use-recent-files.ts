@@ -6,14 +6,16 @@ import type { FileOrFolderType } from "@/types";
 
 type UseRecentFilesType = {
   recentFiles: FileOrFolderType[];
-  updateRecentFiles: (file: FileOrFolderType) => Promise<void>;
+  updateRecentFiles: (file: FileOrFolderType) => void;
+  removeFromRecentFiles: (file: FileOrFolderType) => void;
+  contains: (file: FileOrFolderType) => boolean;
 };
 
 export const useRecentFiles = create<UseRecentFilesType>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       recentFiles: [],
-      updateRecentFiles: async (file) => {
+      updateRecentFiles: (file) => {
         set((prev) => {
           const fileIndex = prev.recentFiles.findIndex(
             (recentFile) => recentFile.id === file.id
@@ -40,6 +42,19 @@ export const useRecentFiles = create<UseRecentFilesType>()(
 
           return { recentFiles: newRecentFiles };
         });
+      },
+      removeFromRecentFiles: (file) => {
+        set((prev) => {
+          const newRecentFiles = prev.recentFiles.filter(
+            (recentFile) => recentFile.id !== file.id
+          );
+          return { recentFiles: newRecentFiles };
+        });
+      },
+      contains: (file) => {
+        return !!get().recentFiles.find(
+          (recentFile) => recentFile.id === file.id
+        );
       },
     }),
     {

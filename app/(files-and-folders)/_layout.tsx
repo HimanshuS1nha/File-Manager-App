@@ -12,6 +12,12 @@ import RenameModal from "@/components/modal/rename-modal";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
+import { useFavourites } from "@/hooks/use-favourites";
+import { useRecentFiles } from "@/hooks/use-recent-files";
+
+import { getFileType } from "@/utils/get-file-type";
+
+import type { FileOrFolderType } from "@/types";
 
 const FilesAndFoldersLayout = () => {
   const queryClient = useQueryClient();
@@ -26,23 +32,71 @@ const FilesAndFoldersLayout = () => {
     (state) => state.setIsVisible
   );
 
-  const handleDeleteItem = useCallback(async (path: string) => {
-    await unlink(path);
-  }, []);
+  const favourites = useFavourites((state) => state.favourites);
+  const updateFavourites = useFavourites((state) => state.updateFavourites);
+  const doesFavouritesContain = useFavourites((state) => state.contains);
 
-  const handleDeleteFolder = useCallback(async (path: string) => {
-    const filesAndFolders = await readDir(path);
+  const recentFiles = useRecentFiles((state) => state.recentFiles);
+  const removeFromRecentFiles = useRecentFiles(
+    (state) => state.removeFromRecentFiles
+  );
+  const doesRecentFilesContain = useRecentFiles((state) => state.contains);
+
+  const handleDeleteItem = useCallback(
+    async (file: FileOrFolderType) => {
+      await unlink(file.path);
+
+      if (doesFavouritesContain(file)) {
+        updateFavourites(file);
+      }
+
+      if (doesRecentFilesContain(file)) {
+        removeFromRecentFiles(file);
+      }
+    },
+    [favourites, recentFiles]
+  );
+
+  const handleDeleteFolder = useCallback(async (file: FileOrFolderType) => {
+    const filesAndFolders = await readDir(file.path);
 
     for (const ele of filesAndFolders) {
       if (ele.isDirectory()) {
-        await handleDeleteFolder(ele.path);
-        await handleDeleteItem(ele.path);
+        await handleDeleteFolder({
+          id: ele.path,
+          modificationTime: new Date(ele.mtime ?? 0).getTime(),
+          name: ele.name,
+          path: ele.path,
+          size: ele.size,
+          type: ele.isDirectory() ? "folder" : "file",
+          uri: `file://${file.path}`,
+          fileType: getFileType(ele.name),
+        });
+        await handleDeleteItem({
+          id: ele.path,
+          modificationTime: new Date(ele.mtime ?? 0).getTime(),
+          name: ele.name,
+          path: ele.path,
+          size: ele.size,
+          type: ele.isDirectory() ? "folder" : "file",
+          uri: `file://${file.path}`,
+          fileType: getFileType(ele.name),
+        });
       } else {
-        handleDeleteItem(ele.path);
+        handleDeleteItem({
+          id: ele.path,
+          modificationTime: new Date(ele.mtime ?? 0).getTime(),
+          name: ele.name,
+          path: ele.path,
+          size: ele.size,
+          type: ele.isDirectory() ? "folder" : "file",
+          uri: `file://${file.path}`,
+          fileType: getFileType(ele.name),
+        });
       }
     }
 
-    await handleDeleteItem(path);
+    await handleDeleteItem(file);
   }, []);
 
   const { mutate: handleDeleteSelectedItems, isPending } = useMutation({
@@ -50,9 +104,9 @@ const FilesAndFoldersLayout = () => {
     mutationFn: async () => {
       for (const selectedItem of selectedItems) {
         if (selectedItem.type === "file") {
-          await handleDeleteItem(selectedItem.path);
+          await handleDeleteItem(selectedItem);
         } else {
-          await handleDeleteFolder(selectedItem.path);
+          await handleDeleteFolder(selectedItem);
         }
       }
     },
