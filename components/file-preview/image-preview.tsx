@@ -14,7 +14,7 @@ const ImagePreview = ({ file }: { file: FileOrFolderType }) => {
         <Image source={{ uri: file.uri }} style={tw`size-full rounded-lg`} />
       </View>
       <View style={tw`gap-y-1`}>
-        <Text style={tw`capitalize font-medium text-base`}>
+        <Text style={tw`font-medium text-base`}>
           {file.name.length > 30
             ? file.name.substring(0, 30) + "..."
             : file.name}

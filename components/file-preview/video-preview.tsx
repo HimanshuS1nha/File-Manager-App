@@ -21,7 +21,7 @@ const VideoPreview = ({ file }: { file: FileOrFolderType }) => {
         />
       </View>
       <View style={tw`gap-y-1`}>
-        <Text style={tw`capitalize font-medium text-base`}>
+        <Text style={tw`font-medium text-base`}>
           {file.name.length > 30
             ? file.name.substring(0, 30) + "..."
             : file.name}

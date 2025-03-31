@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import MenuDropdown from "@/components/dropdown/menu-dropdown";
 import FilePreviewDropdown from "@/components/dropdown/file-preview-dropdown";
+import RenameModal from "@/components/modal/rename-modal";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
@@ -124,6 +125,8 @@ const FilesAndFoldersLayout = () => {
       <MenuDropdown hideSomeOptions={pathname !== "/folders"} />
 
       <FilePreviewDropdown />
+
+      <RenameModal />
     </>
   );
 };

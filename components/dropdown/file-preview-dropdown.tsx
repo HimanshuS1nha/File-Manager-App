@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { unlink } from "react-native-fs";
 
 import { useFilePreviewDropdown } from "@/hooks/use-file-preview-dropdown";
+import { useRenameModal } from "@/hooks/use-rename-modal";
 
 const FilePreviewDropdown = () => {
   const queryClient = useQueryClient();
@@ -18,15 +19,30 @@ const FilePreviewDropdown = () => {
     setSelectedFilePath,
   } = useFilePreviewDropdown();
 
+  const setIsRenameModalVisible = useRenameModal((state) => state.setIsVisible);
+  const setRenameModalSelectedFilePath = useRenameModal(
+    (state) => state.setSelectedFilePath
+  );
+
   const handleClose = useCallback(() => {
     setPosition({ left: 0, top: 0 });
     setSelectedFilePath(null);
     setIsVisible(false);
   }, []);
 
+  const handleOpenRenameModal = useCallback(() => {
+    setRenameModalSelectedFilePath(selectedFilePath);
+    setIsRenameModalVisible(true);
+    setIsVisible(false);
+  }, [selectedFilePath]);
+
   const { mutate: handleDeleteFile, isPending } = useMutation({
     mutationKey: ["delete-file"],
     mutationFn: async () => {
+      if (!selectedFilePath) {
+        throw new Error("No file selected.");
+      }
+
       await unlink(selectedFilePath!);
     },
     onSettled: async () => {
@@ -48,7 +64,7 @@ const FilePreviewDropdown = () => {
         <View
           style={tw`absolute bg-white shadow-lg shadow-black p-4 rounded-lg justify-center w-[40%] gap-y-5 top-[${position.top}px] left-[${position.left}px]`}
         >
-          <Pressable>
+          <Pressable onPress={handleOpenRenameModal}>
             <Text style={tw`text-base`}>Rename</Text>
           </Pressable>
           <Pressable>
