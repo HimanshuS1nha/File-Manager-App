@@ -143,13 +143,14 @@ const FilePreview = ({
         <OtherFilePreview file={file} />
       )}
 
-      {isFileSelected ? (
-        <AntDesign name="checkcircle" size={20} color="blue" />
-      ) : (
-        <Pressable onPress={handleOpenFilePreviewDropdown}>
-          <FontAwesome6 name="ellipsis-vertical" size={20} color="black" />
-        </Pressable>
-      )}
+      {isSelectable &&
+        (isFileSelected ? (
+          <AntDesign name="checkcircle" size={20} color="blue" />
+        ) : (
+          <Pressable onPress={handleOpenFilePreviewDropdown}>
+            <FontAwesome6 name="ellipsis-vertical" size={20} color="black" />
+          </Pressable>
+        ))}
     </Pressable>
   );
 };

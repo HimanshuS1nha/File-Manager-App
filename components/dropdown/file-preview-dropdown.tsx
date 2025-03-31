@@ -43,7 +43,7 @@ const FilePreviewDropdown = () => {
         throw new Error("No file selected.");
       }
 
-      await unlink(selectedFilePath!);
+      await unlink(selectedFilePath);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries();
