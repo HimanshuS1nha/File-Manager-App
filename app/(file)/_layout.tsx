@@ -7,6 +7,7 @@ import { router } from "expo-router";
 import * as Sharing from "expo-sharing";
 
 import FileDropdown from "@/components/dropdown/file-dropdown";
+import FileInfoModal from "@/components/modal/file-info-modal";
 
 import { useSelectedFile } from "@/hooks/use-selected-file";
 import { useFavourites } from "@/hooks/use-favourites";
@@ -118,6 +119,8 @@ const FileLayout = () => {
       </Stack>
 
       <FileDropdown />
+
+      <FileInfoModal />
     </>
   );
 };

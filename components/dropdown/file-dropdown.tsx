@@ -9,6 +9,7 @@ import { useFileDropdown } from "@/hooks/use-file-dropdown";
 import { useSelectedFile } from "@/hooks/use-selected-file";
 import { useFavourites } from "@/hooks/use-favourites";
 import { useRecentFiles } from "@/hooks/use-recent-files";
+import { useFileInfoModal } from "@/hooks/use-file-info-modal";
 
 const FileDropdown = () => {
   const queryClient = useQueryClient();
@@ -17,15 +18,17 @@ const FileDropdown = () => {
 
   const { selectedFile, setSelectedFile } = useSelectedFile();
 
-  const favourites = useFavourites((state) => state.favourites);
   const updateFavourites = useFavourites((state) => state.updateFavourites);
   const doesFavouritesContain = useFavourites((state) => state.contains);
 
-  const recentFiles = useRecentFiles((state) => state.recentFiles);
   const removeFromRecentFiles = useRecentFiles(
     (state) => state.removeFromRecentFiles
   );
   const doesRecentFilesContain = useRecentFiles((state) => state.contains);
+
+  const setIsFileInfoModalVisible = useFileInfoModal(
+    (state) => state.setIsVisible
+  );
 
   const { mutate: handleDeleteSelectedFile, isPending } = useMutation({
     mutationKey: ["delete-selected-file"],
@@ -60,10 +63,15 @@ const FileDropdown = () => {
     >
       <Pressable style={tw`flex-1`} onPress={() => setIsVisible(false)}>
         <View
-          style={tw`absolute right-2 top-[6%] bg-gray-800 shadow-lg shadow-white p-4 rounded-lg justify-center w-[40%] gap-y-5`}
+          style={tw`absolute right-2 top-[6%] bg-white shadow-lg shadow-white p-4 rounded-lg justify-center w-[40%] gap-y-5`}
         >
-          <Pressable>
-            <Text style={tw`text-white text-base`}>Info</Text>
+          <Pressable
+            onPress={() => {
+              setIsVisible(false);
+              setIsFileInfoModalVisible(true);
+            }}
+          >
+            <Text style={tw`text-base`}>Info</Text>
           </Pressable>
           <Pressable
             onPress={() => {
@@ -79,7 +87,7 @@ const FileDropdown = () => {
             }}
             disabled={isPending}
           >
-            <Text style={tw`text-white text-base`}>Delete</Text>
+            <Text style={tw`text-base`}>Delete</Text>
           </Pressable>
         </View>
       </Pressable>
