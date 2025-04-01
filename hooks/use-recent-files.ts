@@ -9,6 +9,7 @@ type UseRecentFilesType = {
   updateRecentFiles: (file: FileOrFolderType) => void;
   removeFromRecentFiles: (file: FileOrFolderType) => void;
   contains: (file: FileOrFolderType) => boolean;
+  renameFile: (filePath: string, newName: string, newPath: string) => void;
 };
 
 export const useRecentFiles = create<UseRecentFilesType>()(
@@ -55,6 +56,23 @@ export const useRecentFiles = create<UseRecentFilesType>()(
         return !!get().recentFiles.find(
           (recentFile) => recentFile.id === file.id
         );
+      },
+      renameFile: (filePath, newName, newPath) => {
+        set((prev) => {
+          const newRecentFiles = prev.recentFiles.map((recentFile) => {
+            if (recentFile.path === filePath) {
+              return {
+                ...recentFile,
+                name: newName,
+                path: newPath,
+                uri: `file://${newPath}`,
+              };
+            }
+            return recentFile;
+          });
+
+          return { recentFiles: newRecentFiles };
+        });
       },
     }),
     {

@@ -7,6 +7,8 @@ import { moveFile } from "react-native-fs";
 import { ZodError } from "zod";
 
 import { useRenameModal } from "@/hooks/use-rename-modal";
+import { useFavourites } from "@/hooks/use-favourites";
+import { useRecentFiles } from "@/hooks/use-recent-files";
 
 import { nameValidator } from "@/validators/name-validator";
 
@@ -15,6 +17,9 @@ const RenameModal = () => {
 
   const { isVisible, selectedFilePath, setIsVisible, setSelectedFilePath } =
     useRenameModal();
+
+  const renameFileInFavourites = useFavourites((state) => state.renameFile);
+  const renameFileInRecentFiles = useRecentFiles((state) => state.renameFile);
 
   const [newName, setNewName] = useState("");
 
@@ -43,6 +48,9 @@ const RenameModal = () => {
       );
 
       await moveFile(selectedFilePath, newFilePath);
+
+      renameFileInFavourites(selectedFilePath, newName, newFilePath);
+      renameFileInRecentFiles(selectedFilePath, newName, newFilePath);
     },
     onSettled: async () => {
       await queryClient.invalidateQueries();

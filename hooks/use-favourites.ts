@@ -7,7 +7,8 @@ import type { FileOrFolderType } from "@/types";
 type UseFavouritesType = {
   favourites: FileOrFolderType[];
   updateFavourites: (favourite: FileOrFolderType) => void;
-  contains: (filePath: FileOrFolderType) => boolean;
+  contains: (file: FileOrFolderType) => boolean;
+  renameFile: (filePath: string, newName: string, newPath: string) => void;
 };
 
 export const useFavourites = create<UseFavouritesType>()(
@@ -31,6 +32,23 @@ export const useFavourites = create<UseFavouritesType>()(
       },
       contains: (file) => {
         return !!get().favourites.find((favourite) => favourite.id === file.id);
+      },
+      renameFile: (filePath, newName, newPath) => {
+        set((prev) => {
+          const newFavourites = prev.favourites.map((favourite) => {
+            if (favourite.path === filePath) {
+              return {
+                ...favourite,
+                name: newName,
+                path: newPath,
+                uri: `file://${newPath}`,
+              };
+            }
+            return favourite;
+          });
+
+          return { favourites: newFavourites };
+        });
       },
     }),
     {
