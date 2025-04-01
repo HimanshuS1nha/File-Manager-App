@@ -6,6 +6,7 @@ import { useSelectedItems } from "@/hooks/use-selected-items";
 import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
 import { useCreateFolderModal } from "@/hooks/use-create-folder-modal";
 import { useCreateZipModal } from "@/hooks/use-create-zip-modal";
+import { router } from "expo-router";
 
 const MenuDropdown = ({ hideSomeOptions }: { hideSomeOptions: boolean }) => {
   const selectedItems = useSelectedItems((state) => state.selectedItems);
@@ -33,10 +34,30 @@ const MenuDropdown = ({ hideSomeOptions }: { hideSomeOptions: boolean }) => {
           {selectedItems.length > 0
             ? !hideSomeOptions && (
                 <>
-                  <Pressable>
+                  <Pressable
+                    onPress={() => {
+                      setIsVisible(false);
+                      router.push({
+                        pathname: "/move-or-copy",
+                        params: {
+                          action: "Move",
+                        },
+                      });
+                    }}
+                  >
                     <Text style={tw`text-base`}>Move to</Text>
                   </Pressable>
-                  <Pressable>
+                  <Pressable
+                    onPress={() => {
+                      setIsVisible(false);
+                      router.push({
+                        pathname: "/move-or-copy",
+                        params: {
+                          action: "Copy",
+                        },
+                      });
+                    }}
+                  >
                     <Text style={tw`text-base`}>Copy to</Text>
                   </Pressable>
                   <Pressable

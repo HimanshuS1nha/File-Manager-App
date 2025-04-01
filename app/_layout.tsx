@@ -28,10 +28,16 @@ export default function RootLayout() {
           }}
         />
 
-        {/* <Stack.Screen
-          name="favourites"
-          options={{ title: "Favourites", headerShown: true }}
-        /> */}
+        <Stack.Screen
+          name="move-or-copy"
+          options={{
+            presentation: "modal",
+            animation: "slide_from_bottom",
+            headerBackVisible: false,
+            headerShadowVisible: false,
+            headerShown: true,
+          }}
+        />
       </Stack>
     </QueryClientProvider>
   );

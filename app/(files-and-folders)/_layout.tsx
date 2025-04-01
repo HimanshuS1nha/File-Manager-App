@@ -114,7 +114,7 @@ const FilesAndFoldersLayout = () => {
       await queryClient.invalidateQueries();
       clearSelectedItems();
     },
-    onError: (error) => {
+    onError: () => {
       Alert.alert("Error", "Error while deleting the items");
     },
   });
@@ -176,7 +176,11 @@ const FilesAndFoldersLayout = () => {
         }}
       />
 
-      <MenuDropdown hideSomeOptions={pathname !== "/folders"} />
+      <MenuDropdown
+        hideSomeOptions={
+          pathname !== "/folders" && pathname !== "internal-storage"
+        }
+      />
 
       <FilePreviewDropdown />
 
