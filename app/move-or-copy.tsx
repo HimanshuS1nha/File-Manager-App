@@ -12,7 +12,10 @@ import {
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FlashList } from "@shopify/flash-list";
 
+import CreateFolderModal from "@/components/modal/create-folder-modal";
+
 import { useSelectedItems } from "@/hooks/use-selected-items";
+import { useCreateFolderModal } from "@/hooks/use-create-folder-modal";
 
 const MoveOrCopy = () => {
   const queryClient = useQueryClient();
@@ -21,6 +24,10 @@ const MoveOrCopy = () => {
   const selectedItems = useSelectedItems((state) => state.selectedItems);
   const clearSelectedItems = useSelectedItems(
     (state) => state.clearSelectedItems
+  );
+
+  const setIsCreateFolderModalVisible = useCreateFolderModal(
+    (state) => state.setIsVisible
   );
 
   const [currentPath, setCurrentPath] = useState(ExternalStorageDirectoryPath);
@@ -76,7 +83,7 @@ const MoveOrCopy = () => {
       await queryClient.invalidateQueries();
       handleClose();
     },
-    onError: (error) => {
+    onError: () => {
       Alert.alert("Error", `Error in moving/copying files`);
     },
   });
@@ -92,8 +99,17 @@ const MoveOrCopy = () => {
               </Pressable>
             );
           },
+          headerRight: () => {
+            return (
+              <Pressable onPress={() => setIsCreateFolderModalVisible(true)}>
+                <AntDesign name="pluscircleo" size={24} color="black" />
+              </Pressable>
+            );
+          },
         }}
       />
+
+      <CreateFolderModal path={currentPath} />
 
       <View
         style={tw`px-4 pt-2 pb-3.5 flex-row gap-x-2 border-b border-b-gray-200`}
