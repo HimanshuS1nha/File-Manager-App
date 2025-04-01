@@ -1,14 +1,27 @@
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, ActivityIndicator, Alert } from "react-native";
 import React, { useCallback, useState } from "react";
 import tw from "twrnc";
 import { Stack, useLocalSearchParams, router } from "expo-router";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-import { readDir, ExternalStorageDirectoryPath } from "react-native-fs";
-import { useQuery } from "@tanstack/react-query";
+import {
+  readDir,
+  ExternalStorageDirectoryPath,
+  moveFile,
+  copyFile,
+} from "react-native-fs";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FlashList } from "@shopify/flash-list";
 
+import { useSelectedItems } from "@/hooks/use-selected-items";
+
 const MoveOrCopy = () => {
+  const queryClient = useQueryClient();
   const { action } = useLocalSearchParams() as { action: "Move" | "Copy" };
+
+  const selectedItems = useSelectedItems((state) => state.selectedItems);
+  const clearSelectedItems = useSelectedItems(
+    (state) => state.clearSelectedItems
+  );
 
   const [currentPath, setCurrentPath] = useState(ExternalStorageDirectoryPath);
   const [breadCrumbs, setBreadCrumbs] = useState([
@@ -34,6 +47,39 @@ const MoveOrCopy = () => {
       return newBreadCrumbs;
     });
   }, [breadCrumbs]);
+
+  const handleClose = useCallback(() => {
+    clearSelectedItems();
+    router.back();
+  }, []);
+
+  const { mutate: handleSelectFolder, isPending } = useMutation({
+    mutationKey: [`${action}`],
+    mutationFn: async () => {
+      if (action === "Move") {
+        for (const selectedItem of selectedItems) {
+          await moveFile(
+            selectedItem.path,
+            `${currentPath}/${selectedItem.name}`
+          );
+        }
+      } else if (action === "Copy") {
+        for (const selectedItem of selectedItems) {
+          await copyFile(
+            selectedItem.path,
+            `${currentPath}/${selectedItem.name}`
+          );
+        }
+      }
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries();
+      handleClose();
+    },
+    onError: (error) => {
+      Alert.alert("Error", `Error in moving/copying files`);
+    },
+  });
   return (
     <View style={tw`flex-1 bg-white`}>
       <Stack.Screen
@@ -41,7 +87,7 @@ const MoveOrCopy = () => {
           title: `${action} to`,
           headerLeft: () => {
             return (
-              <Pressable style={tw`mr-5`} onPress={router.back}>
+              <Pressable style={tw`mr-5`} onPress={handleClose}>
                 <AntDesign name="close" size={24} color="black" />
               </Pressable>
             );
@@ -143,15 +189,19 @@ const MoveOrCopy = () => {
             breadCrumbs.length < 2 ? "bg-gray-400" : "bg-gray-600"
           } rounded-full`}
           onPress={handleGoBack}
-          disabled={breadCrumbs.length < 2}
+          disabled={breadCrumbs.length < 2 || isPending}
         >
           <Text style={tw`font-medium text-white text-base`}>Go Back</Text>
         </Pressable>
         <Pressable
-          style={tw`w-[48%] items-center justify-center h-full bg-indigo-600 rounded-full`}
+          style={tw`w-[48%] items-center justify-center h-full ${
+            isPending ? "bg-indigo-400" : "bg-indigo-600"
+          } rounded-full`}
+          onPress={() => handleSelectFolder()}
+          disabled={isPending}
         >
           <Text style={tw`font-medium text-white text-base`}>
-            Select Folder
+            {isPending ? "Please wait..." : "Select Folder"}
           </Text>
         </Pressable>
       </View>

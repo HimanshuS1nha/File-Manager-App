@@ -8,6 +8,8 @@ import { useFilePreviewDropdown } from "@/hooks/use-file-preview-dropdown";
 import { useRenameModal } from "@/hooks/use-rename-modal";
 import { useFavourites } from "@/hooks/use-favourites";
 import { useRecentFiles } from "@/hooks/use-recent-files";
+import { useSelectedItems } from "@/hooks/use-selected-items";
+import { router } from "expo-router";
 
 const FilePreviewDropdown = () => {
   const queryClient = useQueryClient();
@@ -33,6 +35,10 @@ const FilePreviewDropdown = () => {
     (state) => state.removeFromRecentFiles
   );
   const doesRecentFilesContain = useRecentFiles((state) => state.contains);
+
+  const updateSelectedItems = useSelectedItems(
+    (state) => state.updateSelectedItems
+  );
 
   const handleClose = useCallback(() => {
     setPosition({ left: 0, top: 0 });
@@ -86,12 +92,59 @@ const FilePreviewDropdown = () => {
             <Text style={tw`text-base`}>Rename</Text>
           </Pressable>
           <Pressable>
-            <Text style={tw`text-base`}>Move to</Text>
+            <Text
+              style={tw`text-base`}
+              onPress={() => {
+                if (!selectedFile) {
+                  Alert.alert("Error", "No file selected.");
+                } else {
+                  setIsVisible(false);
+                  updateSelectedItems(selectedFile);
+                  router.push({
+                    pathname: "/move-or-copy",
+                    params: {
+                      action: "Move",
+                    },
+                  });
+                }
+              }}
+            >
+              Move to
+            </Text>
           </Pressable>
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              if (!selectedFile) {
+                Alert.alert("Error", "No file selected.");
+              } else {
+                setIsVisible(false);
+                updateSelectedItems(selectedFile);
+                router.push({
+                  pathname: "/move-or-copy",
+                  params: {
+                    action: "Copy",
+                  },
+                });
+              }
+            }}
+          >
             <Text style={tw`text-base`}>Copy to</Text>
           </Pressable>
-          <Pressable onPress={() => handleDeleteFile()} disabled={isPending}>
+          <Pressable
+            onPress={() => {
+              setIsVisible(false);
+              Alert.alert("Warning", "Do you want to delete this file?", [
+                {
+                  text: "No",
+                },
+                {
+                  text: "Yes",
+                  onPress: () => handleDeleteFile(),
+                },
+              ]);
+            }}
+            disabled={isPending}
+          >
             <Text style={tw`text-base`}>Delete</Text>
           </Pressable>
         </View>
