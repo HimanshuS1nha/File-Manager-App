@@ -44,8 +44,8 @@ const FilePreview = ({
     (state) => state.setIsVisible
   );
   const setPosition = useFilePreviewDropdown((state) => state.setPosition);
-  const setSelectedFilePath = useFilePreviewDropdown(
-    (state) => state.setSelectedFilePath
+  const setFilePreviewDropdownSelectedFile = useFilePreviewDropdown(
+    (state) => state.setSelectedFile
   );
 
   const isFileSelected = useMemo(
@@ -114,7 +114,7 @@ const FilePreview = ({
       const { pageX, pageY } = event.nativeEvent;
 
       setPosition({ top: pageY + 11, left: pageX - 155 });
-      setSelectedFilePath(file.path);
+      setFilePreviewDropdownSelectedFile(file);
       setIsFilePreviewDropdownVisible(true);
     },
     [file]

@@ -53,6 +53,9 @@ const FileDropdown = () => {
       setSelectedFile(null);
       router.back();
     },
+    onError: () => {
+      Alert.alert("Error", "Error in deleting the file.");
+    },
   });
   return (
     <Modal

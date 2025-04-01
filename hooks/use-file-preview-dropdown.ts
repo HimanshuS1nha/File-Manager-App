@@ -1,3 +1,4 @@
+import { FileOrFolderType } from "@/types";
 import { create } from "zustand";
 
 type UseFilePreviewDropdownType = {
@@ -5,8 +6,8 @@ type UseFilePreviewDropdownType = {
   setIsVisible: (isVisible: boolean) => void;
   position: { left: number; top: number };
   setPosition: (position: { left: number; top: number }) => void;
-  selectedFilePath: string | null;
-  setSelectedFilePath: (selectedFilePath: string | null) => void;
+  selectedFile: FileOrFolderType | null;
+  setSelectedFile: (selectedFile: FileOrFolderType | null) => void;
 };
 
 export const useFilePreviewDropdown = create<UseFilePreviewDropdownType>(
@@ -15,7 +16,7 @@ export const useFilePreviewDropdown = create<UseFilePreviewDropdownType>(
     setIsVisible: (isVisible) => set({ isVisible }),
     position: { left: 0, top: 0 },
     setPosition: (position) => set({ position }),
-    selectedFilePath: null,
-    setSelectedFilePath: (selectedFilePath) => set({ selectedFilePath }),
+    selectedFile: null,
+    setSelectedFile: (selectedFile) => set({ selectedFile }),
   })
 );

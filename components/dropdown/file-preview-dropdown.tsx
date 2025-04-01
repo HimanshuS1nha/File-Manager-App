@@ -6,6 +6,8 @@ import { unlink } from "react-native-fs";
 
 import { useFilePreviewDropdown } from "@/hooks/use-file-preview-dropdown";
 import { useRenameModal } from "@/hooks/use-rename-modal";
+import { useFavourites } from "@/hooks/use-favourites";
+import { useRecentFiles } from "@/hooks/use-recent-files";
 
 const FilePreviewDropdown = () => {
   const queryClient = useQueryClient();
@@ -13,10 +15,10 @@ const FilePreviewDropdown = () => {
   const {
     isVisible,
     position,
-    selectedFilePath,
     setIsVisible,
     setPosition,
-    setSelectedFilePath,
+    selectedFile,
+    setSelectedFile,
   } = useFilePreviewDropdown();
 
   const setIsRenameModalVisible = useRenameModal((state) => state.setIsVisible);
@@ -24,26 +26,42 @@ const FilePreviewDropdown = () => {
     (state) => state.setSelectedFilePath
   );
 
+  const updateFavourites = useFavourites((state) => state.updateFavourites);
+  const doesFavouritesContain = useFavourites((state) => state.contains);
+
+  const removeFromRecentFiles = useRecentFiles(
+    (state) => state.removeFromRecentFiles
+  );
+  const doesRecentFilesContain = useRecentFiles((state) => state.contains);
+
   const handleClose = useCallback(() => {
     setPosition({ left: 0, top: 0 });
-    setSelectedFilePath(null);
+    setSelectedFile(null);
     setIsVisible(false);
   }, []);
 
   const handleOpenRenameModal = useCallback(() => {
-    setRenameModalSelectedFilePath(selectedFilePath);
+    setRenameModalSelectedFilePath(selectedFile!.path);
     setIsRenameModalVisible(true);
     setIsVisible(false);
-  }, [selectedFilePath]);
+  }, [selectedFile]);
 
   const { mutate: handleDeleteFile, isPending } = useMutation({
     mutationKey: ["delete-file"],
     mutationFn: async () => {
-      if (!selectedFilePath) {
+      if (!selectedFile) {
         throw new Error("No file selected.");
       }
 
-      await unlink(selectedFilePath);
+      await unlink(selectedFile.path);
+
+      if (doesFavouritesContain(selectedFile)) {
+        updateFavourites(selectedFile);
+      }
+
+      if (doesRecentFilesContain(selectedFile)) {
+        removeFromRecentFiles(selectedFile);
+      }
     },
     onSettled: async () => {
       await queryClient.invalidateQueries();
