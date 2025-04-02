@@ -5,6 +5,7 @@ import { FlashList } from "@shopify/flash-list";
 import { Stack } from "expo-router";
 
 import FilePreview from "@/components/file-preview";
+import MenuDropdown from "@/components/dropdown/menu-dropdown";
 
 import { useFavourites } from "@/hooks/use-favourites";
 import { useSelectedItems } from "@/hooks/use-selected-items";
@@ -22,6 +23,8 @@ const Favourites = () => {
               : "Favourites",
         }}
       />
+
+      <MenuDropdown data={favourites} />
 
       <View style={tw`px-2 pt-1.5 flex-1`}>
         {favourites.length > 0 ? (

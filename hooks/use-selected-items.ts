@@ -6,6 +6,7 @@ type UseSelectedItemsType = {
   selectedItems: FileOrFolderType[];
   updateSelectedItems: (selectedItem: FileOrFolderType) => void;
   clearSelectedItems: () => void;
+  setSelectedItems: (selectedItems: FileOrFolderType[]) => void;
 };
 
 export const useSelectedItems = create<UseSelectedItemsType>((set) => ({
@@ -26,4 +27,5 @@ export const useSelectedItems = create<UseSelectedItemsType>((set) => ({
     });
   },
   clearSelectedItems: () => set({ selectedItems: [] }),
+  setSelectedItems: (selectedItems) => set({ selectedItems }),
 }));

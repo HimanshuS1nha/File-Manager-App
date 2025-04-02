@@ -176,12 +176,6 @@ const FilesAndFoldersLayout = () => {
         }}
       />
 
-      <MenuDropdown
-        hideSomeOptions={
-          pathname !== "/folders" && pathname !== "internal-storage"
-        }
-      />
-
       <FilePreviewDropdown />
 
       <RenameModal />

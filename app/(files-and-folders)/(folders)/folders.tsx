@@ -8,6 +8,7 @@ import { readDir, ExternalStorageDirectoryPath } from "react-native-fs";
 import CustomSectionList from "@/components/custom-section-list";
 import CreateFolderModal from "@/components/modal/create-folder-modal";
 import CreateZipModal from "@/components/modal/create-zip-modal";
+import MenuDropdown from "@/components/dropdown/menu-dropdown";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 
@@ -29,19 +30,21 @@ const Folders = () => {
         path ?? ExternalStorageDirectoryPath + `/${title}`
       );
 
-      return groupAndSortByDate(
-        [],
-        filesAndFolders.map((item) => ({
-          id: item.path,
-          path: item.path,
-          modificationTime: new Date(item.mtime ?? 0).getTime(),
-          name: item.name,
-          type: item.isDirectory() ? "folder" : "file",
-          uri: `file://${item.path}`,
-          fileType: getFileType(item.name),
-          size: item.size,
-        }))
-      );
+      const updatedFilesAndFolders = filesAndFolders.map((item) => ({
+        id: item.path,
+        path: item.path,
+        modificationTime: new Date(item.mtime ?? 0).getTime(),
+        name: item.name,
+        type: item.isDirectory() ? ("folder" as const) : ("file" as const),
+        uri: `file://${item.path}`,
+        fileType: getFileType(item.name),
+        size: item.size,
+      }));
+
+      return {
+        data: groupAndSortByDate([], updatedFilesAndFolders),
+        filesAndFolders: updatedFilesAndFolders,
+      };
     },
   });
   return (
@@ -55,6 +58,10 @@ const Folders = () => {
         }}
       />
 
+      {data && data.filesAndFolders && (
+        <MenuDropdown data={data.filesAndFolders} />
+      )}
+
       <CreateFolderModal
         path={path ?? `${ExternalStorageDirectoryPath}/${title}`}
       />
@@ -66,8 +73,8 @@ const Folders = () => {
       <View style={tw`px-2 pt-1.5`}>
         {isLoading ? (
           <ActivityIndicator size={40} color={"blue"} />
-        ) : data && data.length > 0 ? (
-          <CustomSectionList data={data} />
+        ) : data && data.data && data.data.length > 0 ? (
+          <CustomSectionList data={data.data} />
         ) : (
           <View style={tw`items-center`}>
             <Text style={tw`text-rose-600 font-semibold`}>

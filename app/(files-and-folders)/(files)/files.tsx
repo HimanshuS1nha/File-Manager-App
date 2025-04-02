@@ -10,6 +10,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 
 import CustomSectionList from "@/components/custom-section-list";
+import MenuDropdown from "@/components/dropdown/menu-dropdown";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 
@@ -50,19 +51,21 @@ const Files = () => {
     queryFn: async () => {
       const files = await getFilesRecursively(ExternalStorageDirectoryPath);
 
-      return groupAndSortByDate(
-        [],
-        files.map((item) => ({
-          id: item.path,
-          path: item.path,
-          modificationTime: new Date(item.mtime ?? 0).getTime(),
-          name: item.name,
-          type: item.isDirectory() ? "folder" : "file",
-          uri: `file://${item.path}`,
-          fileType: getFileType(item.name),
-          size: item.size,
-        }))
-      );
+      const updatedFiles = files.map((item) => ({
+        id: item.path,
+        path: item.path,
+        modificationTime: new Date(item.mtime ?? 0).getTime(),
+        name: item.name,
+        type: item.isDirectory() ? ("folder" as const) : ("file" as const),
+        uri: `file://${item.path}`,
+        fileType: getFileType(item.name),
+        size: item.size,
+      }));
+
+      return {
+        data: groupAndSortByDate([], updatedFiles),
+        files: updatedFiles,
+      };
     },
   });
   return (
@@ -76,11 +79,13 @@ const Files = () => {
         }}
       />
 
+      {data && data.files && <MenuDropdown data={data.files} />}
+
       <View style={tw`px-2 pt-1.5`}>
         {isLoading ? (
           <ActivityIndicator size={40} color={"blue"} />
-        ) : data && data.length > 0 ? (
-          <CustomSectionList data={data} />
+        ) : data && data.data && data.data.length > 0 ? (
+          <CustomSectionList data={data.data} />
         ) : (
           <View style={tw`items-center`}>
             <Text style={tw`text-rose-600 font-semibold`}>

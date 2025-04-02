@@ -1,15 +1,24 @@
 import { View, Text, Pressable, Modal } from "react-native";
 import React from "react";
 import tw from "twrnc";
+import { router } from "expo-router";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
 import { useCreateFolderModal } from "@/hooks/use-create-folder-modal";
 import { useCreateZipModal } from "@/hooks/use-create-zip-modal";
-import { router } from "expo-router";
 
-const MenuDropdown = ({ hideSomeOptions }: { hideSomeOptions: boolean }) => {
+import type { FileOrFolderType } from "@/types";
+
+const MenuDropdown = ({
+  hideSomeOptions = false,
+  data,
+}: {
+  hideSomeOptions?: boolean;
+  data: FileOrFolderType[];
+}) => {
   const selectedItems = useSelectedItems((state) => state.selectedItems);
+  const setSelectedItems = useSelectedItems((state) => state.setSelectedItems);
 
   const setIsCreateFolderModalVisible = useCreateFolderModal(
     (state) => state.setIsVisible
@@ -80,7 +89,12 @@ const MenuDropdown = ({ hideSomeOptions }: { hideSomeOptions: boolean }) => {
                   <Text style={tw`text-base`}>New folder</Text>
                 </Pressable>
               )}
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              setSelectedItems(data);
+              setIsVisible(false);
+            }}
+          >
             <Text style={tw`text-base`}>Select all</Text>
           </Pressable>
         </View>

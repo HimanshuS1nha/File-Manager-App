@@ -10,6 +10,7 @@ import FolderPreview from "@/components/folder-preview";
 import FilePreview from "@/components/file-preview";
 import CreateFolderModal from "@/components/modal/create-folder-modal";
 import CreateZipModal from "@/components/modal/create-zip-modal";
+import MenuDropdown from "@/components/dropdown/menu-dropdown";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 
@@ -56,6 +57,8 @@ const InternalStorage = () => {
               : "Internal Storage",
         }}
       />
+
+      {data && <MenuDropdown data={data} />}
 
       <CreateFolderModal path={ExternalStorageDirectoryPath} />
 
