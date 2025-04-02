@@ -107,7 +107,7 @@ const ImagesVideosAudio = () => {
         }}
       />
 
-      <MenuDropdown data={menuDropdownData} />
+      <MenuDropdown hideSomeOptions data={menuDropdownData} />
 
       <View style={tw`px-2 pt-1.5`}>
         {isLoading ? (

@@ -79,7 +79,7 @@ const Files = () => {
         }}
       />
 
-      {data && data.files && <MenuDropdown data={data.files} />}
+      {data && data.files && <MenuDropdown hideSomeOptions data={data.files} />}
 
       <View style={tw`px-2 pt-1.5`}>
         {isLoading ? (
