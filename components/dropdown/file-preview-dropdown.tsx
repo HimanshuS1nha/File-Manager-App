@@ -73,8 +73,8 @@ const FilePreviewDropdown = () => {
       }
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries();
       setEndCursor(undefined);
+      await queryClient.invalidateQueries();
       handleClose();
     },
     onError: () => {

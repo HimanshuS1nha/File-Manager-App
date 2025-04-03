@@ -51,8 +51,8 @@ const FileDropdown = () => {
       }
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries();
       setEndCursor(undefined);
+      await queryClient.invalidateQueries();
       setIsVisible(false);
       setSelectedFile(null);
       router.back();

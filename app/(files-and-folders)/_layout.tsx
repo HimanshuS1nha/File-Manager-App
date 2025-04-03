@@ -114,8 +114,8 @@ const FilesAndFoldersLayout = () => {
       }
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries();
       setEndCursor(undefined);
+      await queryClient.invalidateQueries();
       clearSelectedItems();
     },
     onError: () => {

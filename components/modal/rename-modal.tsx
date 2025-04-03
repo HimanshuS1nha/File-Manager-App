@@ -56,8 +56,8 @@ const RenameModal = () => {
       renameFileInRecentFiles(selectedFilePath, newName, newFilePath);
     },
     onSettled: async () => {
-      await queryClient.invalidateQueries();
       setEndCursor(undefined);
+      await queryClient.invalidateQueries();
       handleClose();
     },
     onError: (error) => {

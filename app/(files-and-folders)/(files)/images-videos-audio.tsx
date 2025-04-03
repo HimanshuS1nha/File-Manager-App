@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import tw from "twrnc";
 import * as MediaLibrary from "expo-media-library";
 import * as FileSystem from "expo-file-system";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Stack, useFocusEffect, useLocalSearchParams } from "expo-router";
 
 import CustomSectionList from "@/components/custom-section-list";
@@ -30,9 +30,9 @@ const ImagesVideosAudio = () => {
     { title: Date; data: FileOrFolderType[] }[]
   >([]);
 
-  const { data, isLoading, refetch, error } = useQuery({
-    queryKey: [`get-${type}-${endCursor}`],
-    queryFn: async () => {
+  const { mutate: getData, isPending } = useMutation({
+    mutationKey: [`get-${type}`],
+    mutationFn: async () => {
       const result = await MediaLibrary.getAssetsAsync({
         mediaType:
           type === "Images"
@@ -64,10 +64,24 @@ const ImagesVideosAudio = () => {
 
       return { assets, endCursor: result.endCursor };
     },
+    onSuccess: (data) => {
+      if (data.assets.length > 0) {
+        if (endCursor) {
+          setFiles((prev) => {
+            const newFiles = [...prev];
+            return groupAndSortByDate(newFiles, data.assets);
+          });
+          setEndCursor(data.endCursor);
+        } else {
+          setFiles(groupAndSortByDate([], data.assets));
+          setEndCursor(data.endCursor);
+        }
+      }
+    },
+    onError: () => {
+      Alert.alert("Error", "Some error occured.");
+    },
   });
-  if (error) {
-    Alert.alert("Error", "Some error occured.");
-  }
 
   const menuDropdownData = useMemo(() => {
     return files.reduce((acc, file) => {
@@ -80,14 +94,8 @@ const ImagesVideosAudio = () => {
   }, [files]);
 
   useEffect(() => {
-    if (data && data.assets) {
-      setFiles((prev) => {
-        const newFiles = [...prev];
-        return groupAndSortByDate(newFiles, data.assets);
-      });
-      setEndCursor(data.endCursor);
-    }
-  }, [data]);
+    getData();
+  }, [endCursor]);
 
   useFocusEffect(
     useCallback(() => {
@@ -112,10 +120,10 @@ const ImagesVideosAudio = () => {
       <MenuDropdown hideSomeOptions data={menuDropdownData} />
 
       <View style={tw`px-2 pt-1.5`}>
-        {isLoading ? (
+        {isPending ? (
           <ActivityIndicator size={40} color={"blue"} />
         ) : files.length > 0 ? (
-          <CustomSectionList data={files} onEndReached={refetch} />
+          <CustomSectionList data={files} onEndReached={getData} />
         ) : (
           <View style={tw`items-center`}>
             <Text style={tw`text-rose-600 font-semibold`}>
