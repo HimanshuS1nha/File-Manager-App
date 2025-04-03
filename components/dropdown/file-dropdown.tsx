@@ -10,7 +10,6 @@ import { useSelectedFile } from "@/hooks/use-selected-file";
 import { useFavourites } from "@/hooks/use-favourites";
 import { useRecentFiles } from "@/hooks/use-recent-files";
 import { useFileInfoModal } from "@/hooks/use-file-info-modal";
-import { useEndCursor } from "@/hooks/use-end-cursor";
 
 const FileDropdown = () => {
   const queryClient = useQueryClient();
@@ -31,8 +30,6 @@ const FileDropdown = () => {
     (state) => state.setIsVisible
   );
 
-  const setEndCursor = useEndCursor((state) => state.setEndCursor);
-
   const { mutate: handleDeleteSelectedFile, isPending } = useMutation({
     mutationKey: ["delete-selected-file"],
     mutationFn: async () => {
@@ -51,7 +48,6 @@ const FileDropdown = () => {
       }
     },
     onSettled: async () => {
-      setEndCursor(undefined);
       await queryClient.invalidateQueries();
       setIsVisible(false);
       setSelectedFile(null);

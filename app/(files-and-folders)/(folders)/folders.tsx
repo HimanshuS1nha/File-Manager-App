@@ -76,7 +76,7 @@ const Folders = () => {
         ) : data && data.data && data.data.length > 0 ? (
           <CustomSectionList data={data.data} />
         ) : (
-          <View style={tw`items-center`}>
+          <View style={tw`items-center mt-2.5`}>
             <Text style={tw`text-rose-600 font-semibold`}>
               No data to show.
             </Text>

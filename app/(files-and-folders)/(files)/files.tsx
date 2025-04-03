@@ -20,7 +20,10 @@ import { getFileType } from "@/utils/get-file-type";
 const Files = () => {
   const selectedItems = useSelectedItems((state) => state.selectedItems);
 
-  const { type } = useLocalSearchParams() as { type: "Zip" | "Apk" };
+  const { type, title } = useLocalSearchParams() as {
+    type: string[];
+    title: string;
+  };
 
   const getFilesRecursively = async (directoryPath: string) => {
     const filesAndFolders = await readDir(directoryPath);
@@ -34,7 +37,11 @@ const Files = () => {
             files = [...files, ...subFilesAndFolders];
           }
         } else {
-          if (ele.name.toLowerCase().endsWith(type.toLowerCase())) {
+          if (
+            type.includes(
+              ele.name.split(".")[ele.name.split(".").length - 1].toLowerCase()
+            )
+          ) {
             files.push(ele);
           }
         }
@@ -75,7 +82,7 @@ const Files = () => {
           title:
             selectedItems.length > 0
               ? `${selectedItems.length} selected`
-              : type,
+              : title,
         }}
       />
 
@@ -87,7 +94,7 @@ const Files = () => {
         ) : data && data.data && data.data.length > 0 ? (
           <CustomSectionList data={data.data} />
         ) : (
-          <View style={tw`items-center`}>
+          <View style={tw`items-center mt-2.5`}>
             <Text style={tw`text-rose-600 font-semibold`}>
               No data to show.
             </Text>

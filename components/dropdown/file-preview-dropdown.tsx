@@ -10,7 +10,6 @@ import { useRenameModal } from "@/hooks/use-rename-modal";
 import { useFavourites } from "@/hooks/use-favourites";
 import { useRecentFiles } from "@/hooks/use-recent-files";
 import { useSelectedItems } from "@/hooks/use-selected-items";
-import { useEndCursor } from "@/hooks/use-end-cursor";
 
 const FilePreviewDropdown = () => {
   const queryClient = useQueryClient();
@@ -40,8 +39,6 @@ const FilePreviewDropdown = () => {
   const updateSelectedItems = useSelectedItems(
     (state) => state.updateSelectedItems
   );
-
-  const setEndCursor = useEndCursor((state) => state.setEndCursor);
 
   const handleClose = useCallback(() => {
     setPosition({ left: 0, top: 0 });
@@ -73,7 +70,6 @@ const FilePreviewDropdown = () => {
       }
     },
     onSettled: async () => {
-      setEndCursor(undefined);
       await queryClient.invalidateQueries();
       handleClose();
     },

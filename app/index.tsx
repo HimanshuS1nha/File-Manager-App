@@ -28,48 +28,6 @@ export default function Index() {
   const requestPermission = useCallback(async () => {
     if (Platform.OS === "android") {
       if (Platform.Version >= 30) {
-        const permissionStatus = await checkMultiple([
-          PERMISSIONS.ANDROID.READ_MEDIA_AUDIO,
-          PERMISSIONS.ANDROID.READ_MEDIA_IMAGES,
-          PERMISSIONS.ANDROID.READ_MEDIA_VIDEO,
-        ]);
-
-        if (
-          permissionStatus["android.permission.READ_MEDIA_AUDIO"] !==
-          RESULTS.GRANTED
-        ) {
-          const permission = await request(
-            PERMISSIONS.ANDROID.READ_MEDIA_AUDIO
-          );
-          if (permission !== RESULTS.GRANTED) {
-            return false;
-          }
-        }
-
-        if (
-          permissionStatus["android.permission.READ_MEDIA_IMAGES"] !==
-          RESULTS.GRANTED
-        ) {
-          const permission = await request(
-            PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
-          );
-          if (permission !== RESULTS.GRANTED) {
-            return false;
-          }
-        }
-
-        if (
-          permissionStatus["android.permission.READ_MEDIA_VIDEO"] !==
-          RESULTS.GRANTED
-        ) {
-          const permission = await request(
-            PERMISSIONS.ANDROID.READ_MEDIA_VIDEO
-          );
-          if (permission !== RESULTS.GRANTED) {
-            return false;
-          }
-        }
-
         const manageExternalStoragePermission = await checkManagePermission();
         if (!manageExternalStoragePermission) {
           const permission = await requestManagePermission();

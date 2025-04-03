@@ -1,12 +1,11 @@
 import { View, Pressable, Alert } from "react-native";
 import React, { useCallback } from "react";
 import tw from "twrnc";
-import { Stack, router, usePathname } from "expo-router";
+import { Stack, router } from "expo-router";
 import { AntDesign, FontAwesome6 } from "@expo/vector-icons";
 import { readDir, unlink } from "react-native-fs";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import MenuDropdown from "@/components/dropdown/menu-dropdown";
 import FilePreviewDropdown from "@/components/dropdown/file-preview-dropdown";
 import RenameModal from "@/components/modal/rename-modal";
 
@@ -14,7 +13,6 @@ import { useSelectedItems } from "@/hooks/use-selected-items";
 import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
 import { useFavourites } from "@/hooks/use-favourites";
 import { useRecentFiles } from "@/hooks/use-recent-files";
-import { useEndCursor } from "@/hooks/use-end-cursor";
 
 import { getFileType } from "@/utils/get-file-type";
 
@@ -22,7 +20,6 @@ import type { FileOrFolderType } from "@/types";
 
 const FilesAndFoldersLayout = () => {
   const queryClient = useQueryClient();
-  const pathname = usePathname();
 
   const selectedItems = useSelectedItems((state) => state.selectedItems);
   const clearSelectedItems = useSelectedItems(
@@ -42,8 +39,6 @@ const FilesAndFoldersLayout = () => {
     (state) => state.removeFromRecentFiles
   );
   const doesRecentFilesContain = useRecentFiles((state) => state.contains);
-
-    const setEndCursor = useEndCursor((state) => state.setEndCursor);
 
   const handleDeleteItem = useCallback(
     async (file: FileOrFolderType) => {
@@ -114,7 +109,6 @@ const FilesAndFoldersLayout = () => {
       }
     },
     onSettled: async () => {
-      setEndCursor(undefined);
       await queryClient.invalidateQueries();
       clearSelectedItems();
     },

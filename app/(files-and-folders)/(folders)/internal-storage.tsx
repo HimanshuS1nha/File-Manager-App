@@ -85,7 +85,7 @@ const InternalStorage = () => {
           showsVerticalScrollIndicator={false}
         />
       ) : (
-        <View style={tw`items-center`}>
+        <View style={tw`items-center mt-2.5`}>
           <Text style={tw`text-rose-600 font-semibold`}>No data to show.</Text>
         </View>
       )}

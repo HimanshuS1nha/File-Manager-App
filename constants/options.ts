@@ -11,27 +11,30 @@ export const options = [
       Icon: FontAwesome5,
       iconName: "images",
       title: "Images",
-      url: "/images-videos-audio",
+      url: "/files",
       params: {
-        type: "Images",
+        type: ["jpeg", "png", "gif", "webp"],
+        title: "Images",
       },
     },
     {
       Icon: Entypo,
       iconName: "folder-video",
       title: "Videos",
-      url: "/images-videos-audio",
+      url: "/files",
       params: {
-        type: "Videos",
+        type: ["mp4"],
+        title: "Videos",
       },
     },
     {
       Icon: FontAwesome5,
       iconName: "music",
       title: "Audio",
-      url: "/images-videos-audio",
+      url: "/files",
       params: {
-        type: "Audio",
+        type: ["mp3"],
+        title: "Audio",
       },
     },
     {
@@ -51,7 +54,8 @@ export const options = [
       title: "Apk",
       url: "/files",
       params: {
-        type: "Apk",
+        type: ["apk"],
+        title: "Apk",
       },
     },
     {
@@ -60,7 +64,8 @@ export const options = [
       title: "Zip",
       url: "/files",
       params: {
-        type: "Zip",
+        type: ["zip"],
+        title: "Zip",
       },
     },
     {
