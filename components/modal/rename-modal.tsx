@@ -9,6 +9,7 @@ import { ZodError } from "zod";
 import { useRenameModal } from "@/hooks/use-rename-modal";
 import { useFavourites } from "@/hooks/use-favourites";
 import { useRecentFiles } from "@/hooks/use-recent-files";
+import { useEndCursor } from "@/hooks/use-end-cursor";
 
 import { nameValidator } from "@/validators/name-validator";
 
@@ -20,6 +21,8 @@ const RenameModal = () => {
 
   const renameFileInFavourites = useFavourites((state) => state.renameFile);
   const renameFileInRecentFiles = useRecentFiles((state) => state.renameFile);
+
+  const setEndCursor = useEndCursor((state) => state.setEndCursor);
 
   const [newName, setNewName] = useState("");
 
@@ -54,6 +57,7 @@ const RenameModal = () => {
     },
     onSettled: async () => {
       await queryClient.invalidateQueries();
+      setEndCursor(undefined);
       handleClose();
     },
     onError: (error) => {

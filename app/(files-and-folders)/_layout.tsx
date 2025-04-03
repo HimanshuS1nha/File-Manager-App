@@ -14,6 +14,7 @@ import { useSelectedItems } from "@/hooks/use-selected-items";
 import { useMenuDropdown } from "@/hooks/use-menu-dropdown";
 import { useFavourites } from "@/hooks/use-favourites";
 import { useRecentFiles } from "@/hooks/use-recent-files";
+import { useEndCursor } from "@/hooks/use-end-cursor";
 
 import { getFileType } from "@/utils/get-file-type";
 
@@ -41,6 +42,8 @@ const FilesAndFoldersLayout = () => {
     (state) => state.removeFromRecentFiles
   );
   const doesRecentFilesContain = useRecentFiles((state) => state.contains);
+
+    const setEndCursor = useEndCursor((state) => state.setEndCursor);
 
   const handleDeleteItem = useCallback(
     async (file: FileOrFolderType) => {
@@ -112,6 +115,7 @@ const FilesAndFoldersLayout = () => {
     },
     onSettled: async () => {
       await queryClient.invalidateQueries();
+      setEndCursor(undefined);
       clearSelectedItems();
     },
     onError: () => {

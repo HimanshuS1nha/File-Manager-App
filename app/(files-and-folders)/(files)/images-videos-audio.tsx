@@ -10,6 +10,7 @@ import CustomSectionList from "@/components/custom-section-list";
 import MenuDropdown from "@/components/dropdown/menu-dropdown";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
+import { useEndCursor } from "@/hooks/use-end-cursor";
 
 import { groupAndSortByDate } from "@/utils/group-and-sort-by-date";
 import { getFileType } from "@/utils/get-file-type";
@@ -19,6 +20,8 @@ import type { FileOrFolderType } from "@/types";
 const ImagesVideosAudio = () => {
   const selectedItems = useSelectedItems((state) => state.selectedItems);
 
+  const { endCursor, setEndCursor } = useEndCursor();
+
   const { type } = useLocalSearchParams() as {
     type: "Images" | "Videos" | "Audio";
   };
@@ -26,7 +29,6 @@ const ImagesVideosAudio = () => {
   const [files, setFiles] = useState<
     { title: Date; data: FileOrFolderType[] }[]
   >([]);
-  const [endCursor, setEndCursor] = useState<string>();
 
   const { data, isLoading, refetch, error } = useQuery({
     queryKey: [`get-${type}-${endCursor}`],

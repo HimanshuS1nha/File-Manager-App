@@ -16,6 +16,7 @@ import CreateFolderModal from "@/components/modal/create-folder-modal";
 
 import { useSelectedItems } from "@/hooks/use-selected-items";
 import { useCreateFolderModal } from "@/hooks/use-create-folder-modal";
+import { useEndCursor } from "@/hooks/use-end-cursor";
 
 const MoveOrCopy = () => {
   const queryClient = useQueryClient();
@@ -29,6 +30,8 @@ const MoveOrCopy = () => {
   const setIsCreateFolderModalVisible = useCreateFolderModal(
     (state) => state.setIsVisible
   );
+
+  const setEndCursor = useEndCursor((state) => state.setEndCursor);
 
   const [currentPath, setCurrentPath] = useState(ExternalStorageDirectoryPath);
   const [breadCrumbs, setBreadCrumbs] = useState([
@@ -81,6 +84,7 @@ const MoveOrCopy = () => {
     },
     onSettled: async () => {
       await queryClient.invalidateQueries();
+      setEndCursor(undefined);
       handleClose();
     },
     onError: () => {
