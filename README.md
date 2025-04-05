@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# File Manager App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Effortlessly organize and manage your files with our intuitive file manager app – fast, simple, and secure.
 
 ## Get started
 
@@ -10,41 +10,38 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Prebuild
 
    ```bash
-    npx expo start
+   npx expo prebuild
    ```
 
-In the output, you'll find options to open the app in a
+3. Run the app
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   npx expo run:android -> For Android
+   npx expo run:ios -> For iOS
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Features
 
-## Get a fresh project
+- View, rename, delete, move and copy files
+- Create and delete folders
+- Create zip files, delete zip files and zip and unzip files
+- Install apk files
 
-When you're ready, run:
+## TECH STACK USED
 
-```bash
-npm run reset-project
-```
+- React Native Expo
+- Tailwind CSS
+- React native fs
+- Zustand
+- Zod
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Demo
 
-## Learn more
+Live Demo - Coming Soon
 
-To learn more about developing your project with Expo, look at the following resources:
+## 🚀 About Me
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+My name is Himanshu Sinha and I'm a full stack developer.
